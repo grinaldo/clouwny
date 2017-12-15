@@ -1,0 +1,42 @@
+// Warning Alert
+.alert-box {
+    position: fixed;
+    top: 2em;
+    z-index: 9999 !important;
+    left: 50%;
+}
+
+.alert {
+    padding: 20px;
+    color: white;
+    position: relative;
+    left: -50%;
+}
+
+.alert-danger {
+    background-color: #d25d54;
+}
+.alert-success {
+    background-color: #6aca6e;
+}
+.alert-info {
+    background-color: #0089ec;
+}
+.alert-warning {
+    background-color: #eca300;
+}
+
+.close {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: #fbfbfb;
+}

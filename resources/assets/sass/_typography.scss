@@ -1,0 +1,19 @@
+// Typography
+// =============================================
+
+$pink: #fdbfb1;
+
+@font-face {
+    font-family: gotham;
+    src: url('./fonts/gotham.ttf');
+}
+
+@font-face {
+    font-family: gotham-thin;
+    src: url('./fonts/gotham-thin.otf');
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: gotham;
+    color: $pink;
+}
