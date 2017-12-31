@@ -382,27 +382,37 @@ class CartController extends Controller
             'message' => 'Invalid Request'
         ];
         if (\Auth::check()) {
-            $code     = District::where('code', '=', $request->code)
-                ->select('code')
-                ->first();
-            $client   = new \GuzzleHttp\Client();
-            $response = $client->request(
-                'GET', 
-                $this->tariffEndpoint . '?api-key=' . $this->sicepatApikey . '&origin=TGR&destination=' .$code->code . '&weight=' . $request->weight
-            );
-            $result   = json_decode($response->getBody(), true);
-            if (!empty($result['sicepat']['results'])) {
-                $data = [];
-                for ($i = 0; $i < count($result['sicepat']['results']); $i++) {
-                    if ($result['sicepat']['results'][$i]['service'] == 'REG' ||
-                        $result['sicepat']['results'][$i]['service'] == 'BEST') {
-                        $data[] = [
-                            $result['sicepat']['results'][$i]['service'] . ' | Rp.' . $result['sicepat']['results'][$i]['tariff']
-                        ];
+            if ($request->delivery == 'sicepat') {
+                $code     = District::where('code', '=', $request->code)
+                    ->select('code')
+                    ->first();
+                $client   = new \GuzzleHttp\Client();
+                $response = $client->request(
+                    'GET', 
+                    $this->tariffEndpoint . '?api-key=' . $this->sicepatApikey . '&origin=TGR&destination=' .$code->code . '&weight=' . $request->weight
+                );
+                $result   = json_decode($response->getBody(), true);
+                if (!empty($result['sicepat']['results'])) {
+                    $data = [];
+                    for ($i = 0; $i < count($result['sicepat']['results']); $i++) {
+                        if ($result['sicepat']['results'][$i]['service'] == 'REG' ||
+                            $result['sicepat']['results'][$i]['service'] == 'BEST') {
+                            $data[] = [
+                                $result['sicepat']['results'][$i]['service'] . ' | Rp.' . $result['sicepat']['results'][$i]['tariff']
+                            ];
+                        }
                     }
+                    $response = [
+                        'data'    => $data,
+                        'status'  => 'success',
+                        'type'    => 'success',
+                    ];
                 }
+            } else {
                 $response = [
-                    'data'    => $data,
+                    'data'    => [
+                        'Gojek (Ditanggung Pembeli) | Rp. 0'
+                    ],
                     'status'  => 'success',
                     'type'    => 'success',
                 ];

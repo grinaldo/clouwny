@@ -196,6 +196,7 @@ var initCitySelect = function () {
                         $(select).insertAfter('#receiver_district_label');
                         $('#receiver_district').material_select();
                         initGetTariff();
+                        initGetTariffShipper();
                     }
                 },
                 error: function error(data) {
@@ -209,16 +210,52 @@ var initCitySelect = function () {
 var initGetTariff = function () {
     if ($('#receiver_district').length) {
         $('#receiver_district').change(function() {
-            var csrf   = $('meta[name=csrf-token]').attr("content");
-            var code   = $(this).val();
-            var weight = $('#totalweight').data('weight');
+            var csrf     = $('meta[name=csrf-token]').attr("content");
+            var code     = $(this).val();
+            var weight   = $('#totalweight').data('weight');
+            var delivery = $('#delivery_company').val();
             $('#shipping_fee').parent().remove();
             $.ajax({
                 /* the route pointing to the post function */
                 url: '/cart/get-tariff',
                 type: 'POST',
                 /* send the csrf-token and the input to the controller */
-                data: {_token: csrf, code: code, weight: weight},
+                data: {_token: csrf, code: code, weight: weight, delivery: delivery},
+                dataType: 'JSON',
+                /* remind that 'data' is the response of the AjaxController */
+                success: function success(data) {
+                    if (data.type == 'success') {
+                        var select = '<select id="shipping_fee" name="shipping_fee">';
+                        $.each(data.data, function (key, value) {
+                            select += '<option value="' + value + '">' + value + '</option>';
+                        });
+                        select += '</select>';
+                        $(select).insertAfter('#shipping_fee_label');
+                        $('#shipping_fee').material_select();
+                    }
+                },
+                error: function error(data) {
+                    $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                }
+            });
+        });
+    }
+}
+
+var initGetTariffShipper = function () {
+    if ($('#delivery_company').length) {
+        $('#delivery_company').change(function() {
+            var csrf     = $('meta[name=csrf-token]').attr("content");
+            var code     = $('receiver_district').val();
+            var weight   = $('#totalweight').data('weight');
+            var delivery = $(this).val();
+            $('#shipping_fee').parent().remove();
+            $.ajax({
+                /* the route pointing to the post function */
+                url: '/cart/get-tariff',
+                type: 'POST',
+                /* send the csrf-token and the input to the controller */
+                data: {_token: csrf, code: code, weight: weight, delivery: delivery},
                 dataType: 'JSON',
                 /* remind that 'data' is the response of the AjaxController */
                 success: function success(data) {

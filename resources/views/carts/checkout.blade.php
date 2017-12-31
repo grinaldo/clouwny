@@ -21,8 +21,8 @@ Site Name | Checkout
                     <div class="row">
                         <div class="col s12">
                             <ul class="tabs">
-                                <li class="tab col s6"><a class="active" href="#delivery">Delivery</a></li>
-                                <li class="tab col s6"><a href="#dropship">Dropship Sender</a></li>
+                                <li class="tab col s6"><a class="active" href="#delivery">Pengiriman</a></li>
+                                <li class="tab col s6"><a href="#dropship">Dropship</a></li>
                             </ul>
                         </div>
                     </div>
@@ -32,31 +32,41 @@ Site Name | Checkout
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_name" class="active">Name</label>   
+                                    <label for="receiver_name" class="active">Nama Penerima</label>   
                                     <input placeholder="Name" id="receiver_name" type="text" class="validate form-site-input" name="receiver_name" value="{{ !empty(old('receiver_name')) ? old('receiver_name') : Auth::user()->name }}">
                                 </div>
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_phone" class="active">Phone</label>   
+                                    <label for="receiver_phone" class="active">No. Telp</label>   
                                     <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : Auth::user()->phone }}">
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="input-field col s6">
+                                    {!! Form::select('payment_method', ['transfer' => 'Transfer', 'dompet' => 'Dompet'], '', ['id' => 'payment_method']) !!}
+                                    <label>Pembayaran</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    {!! Form::select('delivery_company', ['gojek' => 'Go-jek', 'sicepat' => 'Sicepat'], '', ['id' => 'delivery_company']) !!}
+                                    <label>Jasa Pengiriman</label>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_province" class="active">Province</label>   
+                                    <label for="receiver_province" class="active">Provinsi</label>   
                                     {!! Form::select('receiver_province', $provinces, '', ['id' => 'receiver_province']) !!}
                                 </div>
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_city" id="receiver_city_label" class="active">City</label>   
+                                    <label for="receiver_city" id="receiver_city_label" class="active">Kota</label>   
                                     {!! Form::select('receiver_city', ['-', '-'], '', ['id' => 'receiver_city']) !!}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_district" id="receiver_district_label" class="active">District</label>   
+                                    <label for="receiver_district" id="receiver_district_label" class="active">Kecamatan</label>   
                                     {!! Form::select('receiver_district', ['-', '-'], '', ['id' => 'receiver_district']) !!}
                                 </div>
                                 <div class="input-field col m6 s6">
-                                    <label for="shipping_fee" id="shipping_fee_label" class="active">Shipping</label>   
+                                    <label for="shipping_fee" id="shipping_fee_label" class="active">Jenis Pengiriman</label>   
                                     {!! Form::select('shipping_fee', ['-', '-'], '', ['id' => 'shipping_fee']) !!}
                                 </div>
                             </div>
@@ -64,15 +74,6 @@ Site Name | Checkout
                                 <div class="input-field col s12">
                                     <label for="address">Address</label>
                                     <textarea id="address" class="form-site-input materialize-textarea" name="receiver_address">{{ !empty(old('receiver_address')) ? old('receiver_address') : Auth::user()->address }}</textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <select class="" name="payment_method">
-                                        <option value="transfer">Transfer</option>
-                                        <option value="wallet">Wallet</option>
-                                    </select>
-                                    <label>Payment Option</label>
                                 </div>
                             </div>
                         </div>

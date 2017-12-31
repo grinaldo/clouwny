@@ -47,6 +47,7 @@ class Order extends BaseModel
         'receiver_zipcode',
         'receiver_address',
         'payment_method',
+        'delivery_company',
         'delivery_type',
         'confirmation_channel',
         'confirmation_account',

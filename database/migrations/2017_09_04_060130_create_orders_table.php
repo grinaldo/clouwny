@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('order_number')->unique()->nullable();
             $table->string('latest_status')->nullable();
+            $table->string('delivery_company');
             $table->string('delivery_type');
             $table->integer('shipping_fee');
             $table->integer('total_fee');

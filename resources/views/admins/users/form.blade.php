@@ -24,6 +24,7 @@
     !!}
     {!! Form::backendSelect('role', 'Role', $roles) !!}
     {!! Form::backendText('name', 'Name') !!}
+    {!! Form::backendText('wallet', 'Wallet') !!}
     {!! Form::backendText('username', 'Username') !!}
     {!! Form::backendEmail('email', 'Email') !!}
     {!! Form::backendPassword('password', 'Password') !!}
