@@ -67,6 +67,7 @@ $factory->define(App\Model\Order::class, function (Faker\Generator $faker) {
     return [
         'user_id' => rand(1,100),
         'is_dropship' => rand(0,1),
+        'delivery_company' => 'sicepat',
         'delivery_type' => $shipmentType[rand(0,count($shipmentType)-1)],
         'shipping_fee' => rand(10000,99999),
         'total_fee' => rand(50000,99999),

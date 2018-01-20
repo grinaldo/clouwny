@@ -30,7 +30,6 @@ class PagesTableSeeder extends Seeder
         ]);
         $model->save();
 
-
         $model = new Model([
             'name'              => 'company-logo', 
             'title'             => 'Company Logo',
@@ -38,6 +37,15 @@ class PagesTableSeeder extends Seeder
             'image'             => 'images/logo.png',
             'short_description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid velit maiores, eum quibusdam, alias, architecto deleniti recusandae totam hic repellat ipsa cupiditate dolorum iste porro amet voluptatum, incidunt exercitationem dicta!', 
             'description'       => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo dolorum, dignissimos sit id fugit blanditiis, numquam possimus accusamus obcaecati, aspernatur nobis ipsa itaque. Perferendis aperiam excepturi ipsa dolor mollitia numquam.',
+        ]);
+        $model->save();
+
+        $model = new Model([
+            'name'              => 'about-static', 
+            'title'             => 'About Us',
+            'short_title'       => 'Clouwny Online Clothing Store',
+            'short_description' => '<p>Here in <b>Clouwny</b> we provide the high quality women wears with interesting price for you fashion lovers. We have wide range of collections from dressing, accessories, and so on to fulfill your fashion needs. </p>', 
+            'description'       => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo dolorum, dignissimos sit id fugit blanditiis, numquam possimus accusamus obcaecati, aspernatur nobis ipsa itaque. Perferendis aperiam excepturi ipsa dolor mollitia numquam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, iusto eum eveniet vitae temporibus, ab eaque obcaecati voluptatum molestiae itaque pariatur sapiente nam porro ea, tempora autem. Quam, harum. Cum.',
         ]);
         $model->save();
     }

@@ -54,4 +54,4 @@ Route::post('/contacts', 'ContactController@store')->name('contacts.store');
 // FAQ
 Route::get('/faq', 'FAQController@index')->name('faqs');
 // About
-Route::get('/about', 'StaticController@about')->name('about');
+Route::get('/about', 'StaticController@aboutIndex')->name('about');
