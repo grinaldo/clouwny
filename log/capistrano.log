@@ -1,0 +1,40 @@
+# Logfile created on 2018-01-20 05:33:36 +0000 by logger.rb/56815
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-01-20 05:33:36 +0000 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [e00d8003] Running /usr/bin/env mkdir -p /tmp as clouwny@159.89.205.126
+  INFO [bebd585a] Running /usr/bin/env mkdir -p /tmp as lazada@10.202.0.190
+ DEBUG [e00d8003] Command: /usr/bin/env mkdir -p /tmp
+ DEBUG [bebd585a] Command: /usr/bin/env mkdir -p /tmp
+  INFO [e00d8003] Finished in 5.504 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 0.0%
+  INFO Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 100.0%
+  INFO [56ed4e72] Running /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh as clouwny@159.89.205.126
+ DEBUG [56ed4e72] Command: /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh
+  INFO [56ed4e72] Finished in 0.078 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-01-20 05:36:23 +0000 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [8bbb409b] Running /usr/bin/env mkdir -p /tmp as clouwny@159.89.205.126
+ DEBUG [8bbb409b] Command: /usr/bin/env mkdir -p /tmp
+  INFO [6e5e8c66] Running /usr/bin/env mkdir -p /tmp as lazada@10.202.0.190
+ DEBUG [6e5e8c66] Command: /usr/bin/env mkdir -p /tmp
+  INFO [8bbb409b] Finished in 7.090 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 0.0%
+  INFO Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 100.0%
+  INFO [0893f3a9] Running /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh as clouwny@159.89.205.126
+ DEBUG [0893f3a9] Command: /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh
+  INFO [0893f3a9] Finished in 0.080 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-01-20 05:41:02 +0000 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [4cbf1c5b] Running /usr/bin/env mkdir -p /tmp as clouwny@159.89.205.126
+ DEBUG [4cbf1c5b] Command: /usr/bin/env mkdir -p /tmp
+  INFO [d149f8e9] Running /usr/bin/env mkdir -p /tmp as lazada@10.202.0.190
+ DEBUG [d149f8e9] Command: /usr/bin/env mkdir -p /tmp
+  INFO [4cbf1c5b] Finished in 5.724 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 0.0%
+  INFO Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 100.0%
+  INFO [7f644191] Running /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh as clouwny@159.89.205.126
+ DEBUG [7f644191] Command: /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh
+  INFO [7f644191] Finished in 0.093 seconds with exit status 0 (successful).
