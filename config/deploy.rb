@@ -2,7 +2,7 @@
 lock "~> 3.10.0"
 
 set :application, "clouwny"
-set :repo_url, "ssh://git@bitbucket.lzd.co/~georgiusw/clouwny.git"
+set :repo_url, "ssh://git@github.com/grinaldo/clouwny.git"
 set :branch, 'master'
 
 # Default branch is :master

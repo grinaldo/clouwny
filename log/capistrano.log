@@ -38,3 +38,21 @@
   INFO [7f644191] Running /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh as clouwny@159.89.205.126
  DEBUG [7f644191] Command: /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh
   INFO [7f644191] Finished in 0.093 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-01-20 05:47:06 +0000 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [d7e12282] Running /usr/bin/env mkdir -p /tmp as root@159.89.205.126
+ DEBUG [d7e12282] Command: /usr/bin/env mkdir -p /tmp
+  INFO [d7e12282] Finished in 6.618 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 0.0%
+  INFO Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 100.0%
+  INFO [60e07863] Running /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh as root@159.89.205.126
+ DEBUG [60e07863] Command: /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh
+  INFO [60e07863] Finished in 0.088 seconds with exit status 0 (successful).
+  INFO [7259e9ab] Running /usr/bin/env git ls-remote ssh://git@bitbucket.lzd.co/~georgiusw/clouwny.git HEAD as root@159.89.205.126
+ DEBUG [7259e9ab] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env git ls-remote ssh://git@bitbucket.lzd.co/~georgiusw/clouwny.git HEAD )
+ DEBUG [7259e9ab] 	ssh: Could not resolve hostname bitbucket.lzd.co: Name or service not known
+ DEBUG [7259e9ab] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
