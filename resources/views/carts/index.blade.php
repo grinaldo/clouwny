@@ -30,7 +30,8 @@ Clouwny | Shopping Bag
                         </thead>
                         <tbody>
                             @if(!empty($carts) && count($carts))
-                            @foreach($carts as $key=> $item)
+                            @if(\Auth::check())
+                            @foreach($carts as $key => $item)
                             <tr class="idx-cart-{{$key}}">
                                 <td><img src="{{ !empty($item->image) ? asset($item->image) : asset('images/dummy-2.jpg') }}" width="100" alt=""></td>
                                 <td>
@@ -44,6 +45,23 @@ Clouwny | Shopping Bag
                                 <td><button class="btn-uniform rm-cart-btn" type="submit" data-product="{{ $item->product()->first()->slug }}" data-target=".idx-cart-{{$key}}"><i class="fa fa-icon fa-close" title="remove" alt="remove"></i></button></td>
                             </tr>
                             @endforeach
+                            @else
+                            @foreach($carts as $key => $item)
+                            <tr class="idx-cart-{{$key}}">
+                                <td><img src="{{ !empty($item['product']->image) ? asset($item['product']->image) : asset('images/dummy-2.jpg') }}" width="100" alt=""></td>
+                                <td>
+                                    <a class="grey-text" href="{{ url('/products/'.$item['product']->category()->first()->slug.'/'.$item['product']->slug) }}">
+                                        {{ $item['product']->name }}
+                                        - <i class="fa fa-icon fa-search"></i>
+                                    </a>
+                                </td>
+                                <td>{{ $item['quantity'] }}</td>
+                                <td>Rp {{ number_format($item['product']->price) }},-</td>
+                                <td><button class="btn-uniform rm-cart-btn" type="submit" data-product="{{ $item['product']->slug }}" data-target=".idx-cart-{{$key}}"><i class="fa fa-icon fa-close" title="remove" alt="remove"></i></button></td>
+                            </tr>
+                            @endforeach
+                            @endif
+
                             @else
                             <tr>
                                 <td colspan="5"><b>No item added</b></td>

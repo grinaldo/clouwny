@@ -43,7 +43,8 @@ class CartController extends Controller
             $totalPrice = 0;
             $quantity   = 0;
             foreach ($carts as $item) {
-                $totalPrice += $item->amount * $item->product()->first()->price;
+                $priceToAdd = ($item->product()->first()->discounted_price != 0) ? $item->product()->first()->discounted_price : $item->product()->first()->price;
+                $totalPrice += $item->amount * $priceToAdd;
                 $quantity   += $item->amount;
             }
             return view('carts.index', [
@@ -53,9 +54,31 @@ class CartController extends Controller
                 'totalPrice' => $totalPrice
             ]);
         } else {
-            session()->flash(NOTIF_DANGER, 'You are not logged in!');
-            return redirect()->route('home');
+            (session()->has('guest-cart-checkout')) ? session()->pull('guest-cart-checkout') : '';
+            $products   = (session()->has('guest-cart')) ? session()->get('guest-cart') : [];
+            $totalPrice = 0;
+            $quantity   = 0;
+            $carts = [];
+            foreach ($products as $productId => $gcart) {
+                $productGet = Product::find($productId);
+                $priceToAdd = ($productGet->discounted_price != 0) ? $productGet->discounted_price : $productGet->price;
+                $totalPrice += $priceToAdd * $gcart['amount'];
+                $quantity   += $gcart['amount'];
+                $carts[]    = [
+                    'quantity' => $gcart['amount'],
+                    'variant'  => $gcart['product_variant_id'],
+                    'product'  => $productGet
+                ];
+            }
+            session()->put('guest-cart-checkout', $carts);
+            return view('carts.index', [
+                'profileNav' => 'cart',
+                'carts'      => $carts,
+                'qty'        => $quantity,
+                'totalPrice' => $totalPrice
+            ]);
         }
+        return redirect()->route('home');
     }
 
     public function store(Request $request) 
@@ -83,6 +106,31 @@ class CartController extends Controller
                         'message' => 'Product has been added',
                     ];
                 }
+            } else {
+                $guestCart = [];
+                if (session()->has('guest-cart')) {
+                    $guestCart = session()->pull('guest-cart');
+                }
+                $product = Product::select('id')->where('slug', '=', $request->product)->first();
+                if (!empty($product)) {
+                    if (!empty($guestCart[$product->id])) {
+                        $guestCart[$product->id] = [
+                            'amount'             => $guestCart[$product->id]['amount'] + 1,
+                            'product_variant_id' => $product->images()->first()->id
+                        ];
+                    } else {
+                        $guestCart[$product->id] = [
+                            'amount'             => 1,
+                            'product_variant_id' => $product->images()->first()->id
+                        ];
+                    }
+                    session()->put('guest-cart', $guestCart);
+                    $response = [
+                        'status'  => 'success',
+                        'type'    => 'success',
+                        'message' => 'Product has been added',
+                    ];
+                }
             }
             return response()->json($response); 
         } else {
@@ -92,27 +140,50 @@ class CartController extends Controller
             ];
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->passes()) {
-                if ($request->variant == '-') {
-                    session()->flash(NOTIF_DANGER, 'Please select the variant');
+                if (\Auth::check()) {
+                    if ($request->variant == '-') {
+                        session()->flash(NOTIF_DANGER, 'Please select the variant');
+                    } else {
+                        $product = Product::select('id')->where('slug', '=', $request->product)->first();
+                        if (!empty($product)) {
+                            $cart = Cart::firstOrNew([
+                                'product_id'         => $product->id,
+                                'user_id'            => \Auth::user()->id,
+                                'product_variant_id' => $request->variant
+                            ]);
+                            if ($cart->id) {
+                                $cart->amount += $request->quantity;
+                            } else {
+                                $cart->amount = $request->quantity;
+                            }
+                            $cart->save();
+                            session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
+                            return redirect()->route('cart');
+                        } else {
+                            session()->flash(NOTIF_DANGER, 'Invalid Request!');
+                        }
+                    }
                 } else {
+                    $guestCart = [];
+                    if (session()->has('guest-cart')) {
+                        $guestCart = session()->pull('guest-cart');
+                    }
                     $product = Product::select('id')->where('slug', '=', $request->product)->first();
                     if (!empty($product)) {
-                        $cart = Cart::firstOrNew([
-                            'product_id'         => $product->id,
-                            'user_id'            => \Auth::user()->id,
-                            'product_variant_id' => $request->variant
-                        ]);
-                        if ($cart->id) {
-                            $cart->amount += $request->quantity;
+                        if (!empty($guestCart[$product->id])) {
+                            $guestCart[$product->id] = [
+                                'amount'             => $guestCart[$product->id]['amount'] + (int)$request->quantity,
+                                'product_variant_id' => $product->images()->first()->id
+                            ];
                         } else {
-                            $cart->amount = $request->quantity;
+                            $guestCart[$product->id] = [
+                                'amount'             => 1,
+                                'product_variant_id' => $product->images()->first()->id
+                            ];
                         }
-                        $cart->save();
-                        session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
-                        return redirect()->route('cart');
-                    } else {
-                        session()->flash(NOTIF_DANGER, 'Invalid Request!');
+                        session()->put('guest-cart', $guestCart);
                     }
+                    session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
                 }
             } else {
                 session()->flash(NOTIF_DANGER, 'Please recheck your input!');
@@ -143,6 +214,11 @@ class CartController extends Controller
                     ];
                 }
             }
+        } else {
+            $guestCart = [];
+            if (session()->has('guest-cart')) {
+                $guestCart = session()->pull('guest-cart');
+            }
         }
         return response()->json($response); 
     }
@@ -155,9 +231,33 @@ class CartController extends Controller
             $totalWeight         = 0;
             $quantity            = 0;
             foreach ($carts as $item) {
-                $totalPrice  += $item->amount * $item->product()->first()->price;
+                $priceToAdd = ($item->product()->first()->discounted_price != 0) ? $item->product()->first()->discounted_price : $item->product()->first()->price;
+                $totalPrice  += $item->amount * $priceToAdd;
                 $totalWeight += $item->product()->first()->weight;
                 $quantity    += $item->amount;
+            }
+            $sicepatProvinces    = \Cache::get('sicepat-provinces-all');
+            if (empty($sicepatProvinces)) {
+                $sicepatProvinces = Province::orderBy('name', 'ASC')->pluck('name', 'name');
+            }
+            return view('carts.checkout', [
+                'profileNav'      => 'cart',
+                'carts'           => $carts,
+                'qty'             => $quantity,
+                'totalPrice'      => $totalPrice,
+                'totalWeight'     => $totalWeight,
+                'provinces'       => $sicepatProvinces,
+            ]);
+        } else {
+            $carts               = session()->get('guest-cart-checkout');
+            $totalPrice          = 0;
+            $totalWeight         = 0;
+            $quantity            = 0;
+            foreach ($carts as $item) {
+                $priceToAdd = ($item['product']->discounted_price != 0) ? $item['product']->discounted_price : $item['product']->price;
+                $totalPrice  += $item['quantity'] * $priceToAdd;
+                $totalWeight += $item['product']->weight;
+                $quantity    += $item['quantity'];
             }
             $sicepatProvinces    = \Cache::get('sicepat-provinces-all');
             if (empty($sicepatProvinces)) {
@@ -190,9 +290,17 @@ class CartController extends Controller
             'is_dropship'       => '',
             // 'delivery_type'     => 'required|string',
         ];
+        if (!\Auth::check()) {
+            $rules[] = [
+                'guest_name'         => 'required|string',
+                'guest_email'        => 'required|string',
+                'guest_phone'        => 'required|string',
+                'guest_confirmation' => 'required|string',
+            ];
+        }
         $validator = \Validator::make($request->all(), $rules);
         if (!$validator->passes()) {
-            session()->flash(NOTIF_DANGER, 'Please check receiver data correctly!');
+            session()->flash(NOTIF_DANGER, 'Please check input data correctly!');
             return redirect()->back()->withInput($request->all());
         }
 
@@ -212,11 +320,15 @@ class CartController extends Controller
         $order->delivery_type = $shippingDetails[0];
         $order->shipping_fee = (float)$shippingDetails[1];
         $order->total_fee = $shippingDetails[1] + $request->totalPrice + rand(111,999);
-        $order->user_id = \Auth::user()->id;
+        $order->user_id = (\Auth::check()) ? \Auth::user()->id : null;
         $order->latest_status = Order::ORDER_STATUS_AWAITING_PAYMENT;
 
         // Get user carts and items to be paid
-        $carts = Cart::where('user_id', '=', \Auth::user()->id)->get();
+        if (\Auth::check()) {
+            $carts = Cart::where('user_id', '=', \Auth::user()->id)->get();
+        } else {
+            $carts = session()->get('guest-cart-checkout');
+        }
 
         // Check if wallet balance is enough
         if ($order->payment_method == 'wallet') {
@@ -236,7 +348,7 @@ class CartController extends Controller
         $order->save();
 
         // Set order status awaiting for payment for non wallet
-        $orderStatus = new OrderStatus([
+        $orderStatus = OrderStatus::firstOrNew([
             'order_id' => $order->id,
             'status'   => $order->latest_status
         ]);
@@ -250,7 +362,7 @@ class CartController extends Controller
             $user->save();
             // Change order status
             $order->latest_status = Order::ORDER_STATUS_AWAITING_VERIFICATION;
-            $orderStatus = new OrderStatus([
+            $orderStatus = OrderStatus::firstOrNew([
                 'order_id' => $order->id,
                 'status'   => $order->latest_status
             ]);
@@ -259,25 +371,45 @@ class CartController extends Controller
         }
 
         // add to order items
-        foreach($carts as $cart) {
-            $orderItem = new OrderItem([
-                'order_id'           => $order->id,
-                'product_id'         => $cart->product_id,
-                'product_variant_id' => $cart->product_variant_id,
-                'amount'             => $cart->amount,
-                'sold_price'         => $cart->product()->first()->price
-            ]);
-            $orderItem->save();
+        if (\Auth::check()) {
+            foreach($carts as $cart) {
+                $orderItem = new OrderItem([
+                    'order_id'           => $order->id,
+                    'product_id'         => $cart->product_id,
+                    'product_variant_id' => $cart->product_variant_id,
+                    'amount'             => $cart->amount,
+                    'sold_price'         => $cart->product()->first()->price
+                ]);
+                $orderItem->save();
+            }
+        } else {
+            foreach($carts as $cart) {
+                $orderItem = new OrderItem([
+                    'order_id'           => $order->id,
+                    'product_id'         => $cart['product']->id,
+                    'product_variant_id' => $cart['variant'],
+                    'amount'             => $cart['quantity'],
+                    'sold_price'         => $cart['product']->price
+                ]);
+                $orderItem->save();
+            }
         }
 
-        // clear cart
-        $cart = Cart::where('user_id', '=', \Auth::user()->id);
-        $cart->delete();
-        
+        // clear cart and redirect
         session()->flash(NOTIF_SUCCESS, 'Order success!');
-        return redirect()->route('orders.thanks', [
-            'id'       => $order->id
-        ]);
+        if (\Auth::check()) {
+            $cart = Cart::where('user_id', '=', \Auth::user()->id);
+            $cart->delete();
+            return redirect()->route('orders.thanks', [
+                'id'       => $order->id
+            ]);
+        } else {
+            session()->pull('guest-cart');
+            session()->pull('guest-cart-checkout');
+            return redirect()->route('home');
+        }
+        
+        
     }
 
     public function thanks($id)
@@ -335,7 +467,7 @@ class CartController extends Controller
             'status'  => 'failed',
             'message' => 'Invalid Request'
         ];
-        if (\Auth::check()) {
+        // if (\Auth::check()) {
             $province = Province::where('name', '=', $request->province)->first();
             $cities   = City::orderBy('name', 'ASC')
                 ->where('province_id', '=', $province->id)
@@ -348,7 +480,7 @@ class CartController extends Controller
                     'type'    => 'success',
                 ];
             }
-        }
+        // }
         return response()->json($response); 
     }
 
@@ -358,7 +490,7 @@ class CartController extends Controller
             'status'  => 'failed',
             'message' => 'Invalid Request'
         ];
-        if (\Auth::check()) {
+        // if (\Auth::check()) {
             $city      = City::where('name', '=', $request->city)->first();
             $districts = District::orderBy('name', 'ASC')
                 ->where('city_id', '=', $city->id)
@@ -371,7 +503,7 @@ class CartController extends Controller
                     'type'    => 'success',
                 ];
             }
-        }
+        // }
         return response()->json($response); 
     }
 
@@ -381,7 +513,7 @@ class CartController extends Controller
             'status'  => 'failed',
             'message' => 'Invalid Request'
         ];
-        if (\Auth::check()) {
+        // if (\Auth::check()) {
             if ($request->delivery == 'sicepat') {
                 $code     = District::where('code', '=', $request->code)
                     ->select('code')
@@ -417,7 +549,7 @@ class CartController extends Controller
                     'type'    => 'success',
                 ];
             }
-        }
+        // }
         return response()->json($response); 
     }
 

@@ -24,6 +24,10 @@ class Order extends BaseModel
      */
     protected $fillable = [
         'user_id',
+        'guest_name',
+        'guest_email',
+        'guest_phone',
+        'guest_confirmation',
         'order_number',
         'tracking_number',
         'latest_status',

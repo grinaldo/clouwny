@@ -52,7 +52,7 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request)
     {
         $user = \App\Model\User::where('email', '=', $request->email)->first();
-        if ($user->role == 9) {
+        if (!is_null($user) && $user->role == 9) {
             session()->flash(NOTIF_DANGER, 'Request not allowed for this user');
             return redirect()->route('home');
         }

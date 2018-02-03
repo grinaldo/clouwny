@@ -30,19 +30,45 @@ Site Name | Checkout
                     <div class="row">
                         <div id="delivery" class="col s12">
                             {{ csrf_field() }}
+                            @if(!Auth::check()) 
+                            <div class="row">
+                                <div class="input-field col m6 s6">
+                                    <label for="guest_name" class="active">Nama Pembeli</label>   
+                                    <input placeholder="Name" id="guest_name" type="text" class="validate form-site-input" name="guest_name" value="{{ !empty(old('guest_name')) ? old('guest_name') : '' }}">
+                                </div>
+                                <div class="input-field col m6 s6">
+                                    <label for="guest_email" class="active">Email Pembeli</label>   
+                                    <input placeholder="Email" id="guest_email" type="text" class="validate form-site-input" name="guest_email" value="{{ !empty(old('guest_email')) ? old('guest_email') : '' }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m6 s6">
+                                    <label for="guest_phone" class="active">Telpon Pembeli</label>   
+                                    <input placeholder="Phone" id="guest_phone" type="text" class="validate form-site-input" name="guest_phone" value="{{ !empty(old('guest_phone')) ? old('guest_phone') : '' }}">
+                                </div>
+                                <div class="input-field col m6 s6">
+                                    <label for="guest_confirmation" class="active">Channel Konfirmasi</label>   
+                                    <input placeholder="Line @myline, Whatsapp, etc" id="guest_confirmation" type="text" class="validate form-site-input" name="guest_confirmation" value="{{ !empty(old('guest_confirmation')) ? old('guest_confirmation') : '' }}">
+                                </div>
+                            </div>
+                            @endif
                             <div class="row">
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_name" class="active">Nama Penerima</label>   
-                                    <input placeholder="Name" id="receiver_name" type="text" class="validate form-site-input" name="receiver_name" value="{{ !empty(old('receiver_name')) ? old('receiver_name') : Auth::user()->name }}">
+                                    <input placeholder="Name" id="receiver_name" type="text" class="validate form-site-input" name="receiver_name" value="{{ !empty(old('receiver_name')) ? old('receiver_name') : ((Auth::check()) ? Auth::user()->name : '') }}">
                                 </div>
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_phone" class="active">No. Telp</label>   
-                                    <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : Auth::user()->phone }}">
+                                    <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : ((Auth::check()) ? Auth::user()->phone : '') }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6">
+                                    @if(Auth::check())
                                     {!! Form::select('payment_method', ['transfer' => 'Transfer', 'dompet' => 'Dompet'], '', ['id' => 'payment_method']) !!}
+                                    @else 
+                                    {!! Form::select('payment_method', ['transfer' => 'Transfer'], '', ['id' => 'payment_method']) !!}
+                                    @endif
                                     <label>Pembayaran</label>
                                 </div>
                                 <div class="input-field col s6">
@@ -73,7 +99,7 @@ Site Name | Checkout
                             <div class="row">
                                 <div class="input-field col s12">
                                     <label for="address">Address</label>
-                                    <textarea id="address" class="form-site-input materialize-textarea" name="receiver_address">{{ !empty(old('receiver_address')) ? old('receiver_address') : Auth::user()->address }}</textarea>
+                                    <textarea id="address" class="form-site-input materialize-textarea" name="receiver_address">{{ !empty(old('receiver_address')) ? old('receiver_address') : ((Auth::check()) ? Auth::user()->address : '') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -119,6 +145,7 @@ Site Name | Checkout
                     </thead>
                     <tbody>
                         @if(!empty($carts) && count($carts))
+                        @if(Auth::check())
                         @foreach($carts as $key=> $item)
                         <tr class="idx-cart-{{$key}}">
                             <td><img src="{{ !empty($item->image) ? asset($item->image) : asset('images/dummy-2.jpg') }}" width="50" alt=""></td>
@@ -128,6 +155,19 @@ Site Name | Checkout
                             <td class="right-align">Rp {{ number_format($item->product()->first()->price) }},-</td>
                         </tr>
                         @endforeach
+
+                        @else
+                        @foreach($carts as $key => $item)
+                        <tr class="idx-cart-{{$key}}">
+                            <td><img src="{{ !empty($item['product']->image) ? asset($item['product']->image) : asset('images/dummy-2.jpg') }}" width="50" alt=""></td>
+                            <td>{{ $item['product']->name }}</td>
+                            <td class="right-align">{{ $item['quantity'] }}</td>
+                            <td class="right-align">{{ number_format($item['product']->weight) }}</td>
+                            <td class="right-align">Rp {{ number_format($item['product']->price) }},-</td>
+                        </tr>
+                        @endforeach
+                        @endif
+
                         @else
                         <tr>
                             <td colspan="5"><b>No item added</b></td>
