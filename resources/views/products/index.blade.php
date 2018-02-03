@@ -68,9 +68,16 @@ Clouwny | All Collection
                                         <div class="product-grid__product">
                                             <div class="product-grid__img-wrapper">         
                                                 <img src="{{asset($product->image)}}" alt="Img" class="product-grid__img" />
+                                                @if($product->discounted_price != 0)
+                                                <img src="{{asset('images/sale.png')}}" alt="sale-tag" class="sale-tag" />
+                                                @endif
                                             </div>
                                             <span class="product-grid__title">{{ $product->name }}</span>
-                                            <span class="product-grid__price">Rp. {{ number_format($product->price) }}</span>
+                                            @if($product->discounted_price != 0)
+                                            <small><span class="product-grid__price discount-strike">Rp. {{ number_format($product->price) }}</span></small>
+                                            <br>
+                                            @endif
+                                            <span class="product-grid__price">Rp. {{ number_format((($product->discounted_price != 0)) ? $product->discounted_price : $product->price) }}</span>
                                             <div class="product-grid__extend-wrapper">
                                                 <div class="product-grid__extend">
                                                     <p class="product-grid__description">{{ !empty($product->short_description) ? $product->short_description : 'Clouwny collection to brighten up your fashionable day' }}</p>
