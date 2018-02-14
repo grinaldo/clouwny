@@ -34,10 +34,12 @@ class ProductController extends ResourceController
         'published' => '',
         'product_images' => 'array',
         'product_images.*.id' => '',
-        'product_images.*.name' => 'required',
         'product_images.*.image' => 'required',
-        'product_images.*.stock' => 'required',
-        'product_images.*.description' => ''
+        'product_variants' => 'array',
+        'product_variants.*.id' => '',
+        'product_variants.*.name' => 'required',
+        'product_variants.*.stock' => 'required',
+        'product_variants.*.description' => ''
     ];
     /**
      * Eloquent Eager Loading
@@ -82,6 +84,7 @@ class ProductController extends ResourceController
 
     protected function doSave() 
     {
+        // Saving Product Images
         $imageIds = [];
         $productImages = $this->model->images;
         if ($this->form->has('product_images')) {
@@ -93,10 +96,29 @@ class ProductController extends ResourceController
                 }
             }
         }
+
+        // Saving Product Variant
+        $variantIds = [];
+        $productVariants = $this->model->variants;
+        if ($this->form->has('product_variants')) {
+            $formVariants = $this->form->all()['product_variants'];
+            foreach ($formVariants as $key => $variant) {
+                $variantSet = $this->model->setVariant($variant);
+                if (!is_null($variantSet) && !empty($variantSet->getKey())) {
+                    $variantIds[] = $variantSet->getKey();
+                }
+            }
+        }
+
         $this->model->stock = 0;
-        $variants = $this->form->get('product_images');
-        foreach ($variants as $variant) {
-            $this->model->stock += $variant['stock'];
+        $variants = $this->form->get('product_variants');
+        if (!empty($variants)) {
+            foreach ($variants as $variant) {
+                $this->model->stock += $variant['stock'];
+            }
+        }
+        if ($this->model->discounted_price) {
+            $this->model->is_sale = true;
         }
         parent::doSave();
 
@@ -104,6 +126,12 @@ class ProductController extends ResourceController
         $productImages->map(function ($image) use ($imageIds) {
             if (!in_array($image->getKey(), $imageIds)) {
                 $image->delete();
+            }
+        });
+        // Mapping association
+        $productVariants->map(function ($variant) use ($variantIds) {
+            if (!in_array($variant->getKey(), $variantIds)) {
+                $variant->delete();
             }
         });
     }

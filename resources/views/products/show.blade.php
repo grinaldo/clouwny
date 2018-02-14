@@ -29,6 +29,7 @@ Clouwny | Product - {{ $product->name }}
                         {!! Form::select('variant', $variants) !!}
                         <label for="variant">Variant</label>
                     </div>
+                    @if($product->stock !== 0)
                     <div class="row">
                         <div class="col s6">
                             <div class="input-field">
@@ -43,9 +44,15 @@ Clouwny | Product - {{ $product->name }}
                             </div>
                         </div>
                     </div>
+                    @endif
+                    @if($product->stock == 0)
+                    <p><b>-- Out of Stock --</b></p>
+                    @endif
                     <button class="button-box button-foo favorite-btn" data-product="{{ $product->slug }}"><b><i class="fa fa-icon fa-heart"></i></b></button>
                     {!! Form::hidden('product', $product->slug) !!}
+                    @if ($product->stock !== 0)
                     <button class="button-box button-foo" type="submit"><b>Add to Cart</b></button>
+                    @endif
                 {!! Form::close() !!}
             </div>
             <div class="col s12 m6 product-detail__mid">

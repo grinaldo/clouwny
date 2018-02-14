@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Model\Bank;
 use App\Model\Order;
+use App\Model\OrderStatus;
 
 class OrderController extends Controller
 {
@@ -57,8 +58,15 @@ class OrderController extends Controller
                 $order->confirmation_channel       = $request->confirmation_channel;
                 $order->confirmation_payer         = $request->confirmation_payer;
                 $order->confirmation_account       = $request->confirmation_account;
-                $order->confirmation_transfer_date = $request->confirmation_transfer;
+                $order->payment_method             = $request->confirmation_transfer;
+                $order->confirmation_transfer_date = $request->confirmation_transfer_date;
+                $order->latest_status              = Order::ORDER_STATUS_AWAITING_VERIFICATION;
                 $order->save();
+
+                $orderStatus = OrderStatus::firstOrCreate([
+                    'order_id' => $order->id,
+                    'status'   => Order::ORDER_STATUS_AWAITING_VERIFICATION
+                ]);
                 
                 session()->flash(NOTIF_SUCCESS, 'Confirmation submitted!');
                 return redirect()->back();

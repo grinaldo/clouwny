@@ -14,7 +14,7 @@
 
 @section('content')
 
-<template id="image-template">
+<template id="variant-template">
     <div class="x_panel">
         <div class="x_title">
             <h2>Product Variant - {#}</h2>
@@ -25,11 +25,27 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content" style="display: block;" data-num="{#}">
+            {!! Form::hidden("product_variants[{#}][id]")!!}
+            {!! Form::backendText('product_variants[{#}][name]', 'Name') !!}
+            {!! Form::backendNumber('product_variants[{#}][stock]', 'Stock') !!}
+            {!! Form::backendTextarea('product_variants[{#}][description]', 'Short Description') !!}
+        </div>
+    </div>
+</template>
+
+<template id="image-template">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Product Image - {#}</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content" style="display: block;" data-num="{#}">
             {!! Form::hidden("product_images[{#}][id]")!!}
-            {!! Form::backendText('product_images[{#}][name]', 'Name') !!}
             {!! Form::backendFileBrowser('product_images[{#}][image]', 'Image') !!}
-            {!! Form::backendNumber('product_images[{#}][stock]', 'Stock') !!}
-            {!! Form::backendTextarea('product_images[{#}][description]', 'Short Description') !!}
         </div>
     </div>
 </template>
@@ -60,15 +76,16 @@
     {!! Form::backendFileBrowser('image', "Select Image")!!}
     {!! Form::backendSelect('published', 'Published', ['No', 'Yes']) !!}
     
-    <br>
+    {{-- ========= Product Variants ========= --}}
+
     <div class="x_title">
-        <h2>Product Images<small>your product image list</small></h2>
+        <h2>Product Variants<small>your product variant list</small></h2>
         <div class="clearfix"></div>
     </div>
 
-    <div id="image-container">
+    <div id="variant-container">
         @if(!empty($model->getKey()))
-        @foreach($model->images()->get() as $key => $image)
+        @foreach($model->variants()->get() as $key => $variant)
         <div class="x_panel">
         <div class="x_title">
             <h2>Product Variant - {{$key+1}}</h2>
@@ -79,22 +96,58 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content" style="display: block;" data-num="{{$key}}">
-                {!! Form::hidden('product_images['.$key.'][id]', $image->getKey())!!}
-                {!! Form::backendText('product_images['.$key.'][name]', 'Name', $image->name) !!}
-                {!! Form::backendFileBrowser('product_images['.$key.'][image]', 'Image', $image->image) !!}
-                {!! Form::backendNumber('product_images['.$key.'][stock]', 'Stock', $image->stock) !!}
-                {!! Form::backendTextarea('product_images['.$key.'][description]', 'Short Description', $image->description) !!}
+                {!! Form::hidden('product_variants['.$key.'][id]', $variant->getKey())!!}
+                {!! Form::backendText('product_variants['.$key.'][name]', 'Name', $variant->name) !!}
+                {!! Form::backendNumber('product_variants['.$key.'][stock]', 'Stock', $variant->stock) !!}
+                {!! Form::backendTextarea('product_variants['.$key.'][description]', 'Short Description', $variant->description) !!}
             </div>
         </div>
         @endforeach
         @endif
     </div>
+
+    <button class="btn btn-primary" id="variant-button">
+        Add Variant
+    </button>
+    <br>
+    <div class="ln_solid"></div>
+    <br>
+
+    {{-- ========= Product Images ========= --}}
+
+    <div class="x_title">
+        <h2>Product Images<small>your product image list</small></h2>
+        <div class="clearfix"></div>
+    </div>
+
+    <div id="image-container">
+        @if(!empty($model->getKey()))
+        @foreach($model->images()->get() as $key => $image)
+        <div class="x_panel">
+        <div class="x_title">
+            <h2>Product Images - {{$key+1}}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content" style="display: block;" data-num="{{$key}}">
+                {!! Form::hidden('product_images['.$key.'][id]', $image->getKey())!!}
+                {!! Form::backendFileBrowser('product_images['.$key.'][image]', 'Image', $image->image) !!}
+            </div>
+        </div>
+        @endforeach
+        @endif
+    </div>
+
     <button class="btn btn-primary" id="image-button">
         Add Image
     </button>
-
     <br>
     <div class="ln_solid"></div>
+    <br>
+
 
     <div class="form-actions">
         <div class="row">
@@ -112,5 +165,6 @@
 @section('page-script')
 <script>
     FormField.initTemplate('#image-template', '#image-container', '#image-button');
+    FormField.initTemplate('#variant-template', '#variant-container', '#variant-button');
 </script>
 @endsection

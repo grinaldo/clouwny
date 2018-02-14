@@ -11413,11 +11413,19 @@ var initProvinceSelect = function initProvinceSelect() {
                         select += '</select>';
                         $(select).insertAfter('#receiver_city_label');
                         $('#receiver_city').material_select();
+                        // clean and reinit district
+                        $('#receiver_district').find('option').remove();
+                        $('#receiver_district').material_select();
+                        // clean and reinit shipping fee
+                        $('#shipping_fee').find('option').remove();
+                        $('#shipping_fee').material_select();
                         initCitySelect();
                     }
                 },
                 error: function error(data) {
-                    $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    if (!$('.alert-box').length) {
+                        $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    }
                 }
             });
         });
@@ -11446,13 +11454,19 @@ var initCitySelect = function initCitySelect() {
                         });
                         select += '</select>';
                         $(select).insertAfter('#receiver_district_label');
+                        // reinit district
                         $('#receiver_district').material_select();
+                        // clean and reinit shipping fee
+                        $('#shipping_fee').find('option').remove();
+                        $('#shipping_fee').material_select();
                         initGetTariff();
                         initGetTariffShipper();
                     }
                 },
                 error: function error(data) {
-                    $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    if (!$('.alert-box').length) {
+                        $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    }
                 }
             });
         });
@@ -11487,7 +11501,9 @@ var initGetTariff = function initGetTariff() {
                     }
                 },
                 error: function error(data) {
-                    $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    if (!$('.alert-box').length) {
+                        $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    }
                 }
             });
         });
@@ -11498,7 +11514,7 @@ var initGetTariffShipper = function initGetTariffShipper() {
     if ($('#delivery_company').length) {
         $('#delivery_company').change(function () {
             var csrf = $('meta[name=csrf-token]').attr("content");
-            var code = $('receiver_district').val();
+            var code = $('#receiver_district').val();
             var weight = $('#totalweight').data('weight');
             var delivery = $(this).val();
             $('#shipping_fee').parent().remove();
@@ -11522,7 +11538,9 @@ var initGetTariffShipper = function initGetTariffShipper() {
                     }
                 },
                 error: function error(data) {
-                    $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    if (!$('.alert-box').length) {
+                        $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    }
                 }
             });
         });

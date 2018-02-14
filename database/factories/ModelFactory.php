@@ -47,7 +47,7 @@ $factory->define(App\Model\Product::class, function (Faker\Generator $faker) {
     return [
         'category_id'       => rand(1,9),
         'name'              => $itemName,
-        'slug'              => $itemSlug,
+        'slug'              => strtolower($itemSlug),
         'stock'             => 100,
         'image'             => $image[rand(0,1)],
         'price'             => rand(20000,200000),
@@ -67,6 +67,8 @@ $factory->define(App\Model\Order::class, function (Faker\Generator $faker) {
     return [
         'user_id' => rand(1,100),
         'is_dropship' => rand(0,1),
+        'order_number' => rand(0,999999999),
+        'tracking_number' => null,
         'delivery_company' => 'sicepat',
         'delivery_type' => $shipmentType[rand(0,count($shipmentType)-1)],
         'shipping_fee' => rand(10000,99999),

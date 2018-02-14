@@ -56,6 +56,10 @@ class Product extends BaseModel
       * Your image association container
       */ 
     protected $imageData = [];
+    /**
+      * Your variant association container
+      */ 
+    protected $variantData = [];
 
     public static function boot()
     {
@@ -63,6 +67,7 @@ class Product extends BaseModel
 
         static::saved(function ($model) {
             $model->saveImageData();
+            $model->saveVariantData();
         });
     }
 
@@ -85,15 +90,30 @@ class Product extends BaseModel
         if (empty($imageSet)) {
             $imageSet = $this->images()->getRelated();
         }
-        if (empty($image['name']) || empty($image['image'])) {
-            return null;
-        }
-        $imageSet->name        = $image['name'];
         $imageSet->image       = $image['image'];
-        $imageSet->stock       = $image['stock'];
-        $imageSet->description = $image['description'];
         $this->imageData[]     = $imageSet;
         return $imageSet;
+    }
+
+    /**
+     * Associate nested inputs -> will be used in controller
+     */
+    public function setVariant($variant)
+    {
+        if ($this->exists) {
+            $variantSet = $this->variants()->where('id', $variant['id'])->first();
+        }
+        if (empty($variantSet)) {
+            $variantSet = $this->variants()->getRelated();
+        }
+        if (empty($variant['name'])) {
+            return null;
+        }
+        $variantSet->name        = $variant['name'];
+        $variantSet->stock       = $variant['stock'];
+        $variantSet->description = $variant['description'];
+        $this->variantData[]     = $variantSet;
+        return $variantSet;
     }
 
     /**
@@ -108,11 +128,27 @@ class Product extends BaseModel
     }
 
     /**
+     * Called on saving process to associate variants
+     */
+    public function saveVariantData()
+    {
+        foreach ($this->variantData as $key => $variant) {
+            $variant->product()->associate($this);
+            $variant->save();
+        }
+    }
+
+    /**
      * Relation
      */
     public function images()
     {
         return $this->hasMany('App\Model\ProductImage');
+    }
+
+    public function variants()
+    {
+        return $this->hasMany('App\Model\ProductVariant');
     }
 
     public function category()

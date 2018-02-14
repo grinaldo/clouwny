@@ -65,15 +65,23 @@
                         <tbody>
                             <tr>
                                 <td>Name</td>
-                                <td>{{ empty($model->user()->first) ? $model->guest_name : $model->user()->first()->name }}</td>
+                                <td>{{ empty($model->user()->first()) ? $model->guest_name : $model->user()->first()->name }}</td>
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td>{{ empty($model->user()->first) ? $model->guest_email : $model->user()->first()->email }}</td>
+                                <td>{{ empty($model->user()->first()) ? $model->guest_email : $model->user()->first()->email }}</td>
                             </tr>
                             <tr>
                                 <td>Phone</td>
-                                <td>{{  empty($model->user()->first) ? $model->guest_name : $model->user()->first()->phone }}</td>
+                                <td>{{  empty($model->user()->first()) ? $model->guest_name : $model->user()->first()->phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Shipping Fee</td>
+                                <td>{{ $model->shipping_fee }}</td>
+                            </tr>
+                            <tr>
+                                <td>Paid Price</td>
+                                <td>{{ $model->total_fee }}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -33,6 +33,8 @@ class CreateProductsTable extends Migration
             $table->dateTime('published_at')->nullable();
             $table->timestamps();
 
+            $table->index(['id', 'category_id', 'slug', 'discounted_price']);
+
             $table->foreign('category_id')
                   ->references('id')->on('categories')
                   ->onDelete('cascade');

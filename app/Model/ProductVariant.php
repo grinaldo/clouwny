@@ -4,9 +4,10 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItem extends BaseModel
+class ProductVariant extends BaseModel
 {
-    protected $table = 'order_items';
+    // Is actually product variant
+    protected $table = 'product_variants';
 
     protected $urlKey = 'id';
 
@@ -16,26 +17,16 @@ class OrderItem extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'order_id',
         'product_id',
-        'product_variant_id',
-        'amount',
-        'sold_price'
+        'name', 
+        'image',
+        'stock',
+        'description'
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-    }
 
     /**
      * Relation
      */
-    public function orders()
-    {
-        return $this->hasMany('App\Model\Order');
-    }
-
     public function product()
     {
         return $this->belongsTo('App\Model\Product');
@@ -43,7 +34,7 @@ class OrderItem extends BaseModel
 
     public function productVariant()
     {
-        return $this->hasMany('App\Model\ProductVariant', 'id', 'product_variant_id');
+        return $this->hasMany('App\Model\ProductVariant');
     }
 
 }

@@ -331,11 +331,11 @@ class CartController extends Controller
         }
 
         // Check if wallet balance is enough
+        $totalPrice = 0;
+        foreach ($carts as $item) {
+            $totalPrice += $item->amount * $item->product()->first()->price;
+        }
         if ($order->payment_method == 'wallet') {
-            $totalPrice = 0;
-            foreach ($carts as $item) {
-                $totalPrice += $item->amount * $item->product()->first()->price;
-            }
             if (\Auth::user()->wallet - $totalPrice < 0) {
                 session()->flash(NOTIF_DANGER, 'Not enough balance on your wallet!');
                 return redirect()->back()->withInput($request->all());
@@ -345,6 +345,7 @@ class CartController extends Controller
         // Save order for status mapping
         $district = District::where('code', '=', $request->receiver_district)->first();
         $order->receiver_district = $district->name;
+        $order->total_fee += $totalPrice;
         $order->save();
 
         // Set order status awaiting for payment for non wallet
@@ -456,7 +457,14 @@ class CartController extends Controller
         $order->confirmation_channel  = $request->confirmation_channel;
         $order->confirmation_payer    = $request->confirmation_payer;
         $order->confirmation_transfer = $request->confirmation_transfer;
+        $order->latest_status         = Order::ORDER_STATUS_AWAITING_VERIFICATION;
         $order->save();
+
+        $orderStatus = OrderStatus::firstOrCreate([
+            'order_id' => $order->id,
+            'status'   => Order::ORDER_STATUS_AWAITING_VERIFICATION
+        ]);
+
         session()->flash(NOTIF_SUCCESS, 'Thanks for confirming the order.');
         return redirect()->route('orders');
     }

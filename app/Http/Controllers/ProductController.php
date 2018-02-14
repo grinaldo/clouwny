@@ -18,13 +18,7 @@ class ProductController extends Controller
 
     public function indexCategory($category)
     {
-        $categoryGet = \Cache::remember(
-            'products-categories',
-            $this->cacheShort,
-            function () use ($category) {
-                return Category::where('slug', '=', $category)->first();
-            }
-        );
+        $categoryGet = Category::where('slug', '=', $category)->first();
         if (empty($categoryGet)) {
             session()->flash(NOTIF_DANGER, 'Product category not found!');
             return redirect()->route('products');
@@ -56,12 +50,14 @@ class ProductController extends Controller
             return redirect()->back();
         }
         $variants   = ['-' => '-'];
-        foreach ($productGet->images()->get() as $variant) {
+        $stock      = 0;
+        foreach ($productGet->variants()->get() as $variant) {
             $variants[$variant->id] = $variant->name;
+            $stock += $variant->stock;
         }
         return view('products.show', [
             'product'  => $productGet,
-            'variants' => $variants
+            'variants' => $variants,
         ]);
     }
 }

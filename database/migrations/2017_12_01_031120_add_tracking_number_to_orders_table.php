@@ -15,7 +15,7 @@ class AddTrackingNumberToOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             // check whether already in queue system
-            $table->string('tracking_number')->nullable();
+            $table->string('tracking_number')->nullable()->unique();
         });
     }
 

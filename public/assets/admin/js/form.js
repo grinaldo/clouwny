@@ -84,7 +84,7 @@ var FormField = function() {
 
     function initTemplate(template, container, button) {
         var container = $(container),
-            template = $(template)[0].innerHTML;
+            template = $(template)[0].innerHTML;    
         $(button).click(function(e) {
             e.preventDefault();
             var tempTemplate = template.replace(new RegExp('{#}', 'g'), container.children().length + 1);

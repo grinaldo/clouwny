@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\Model\Product as Model;
-use App\Model\ProductImage as Variant;
+use App\Model\ProductImage as Image;
+use App\Model\ProductVariant as Variant;
 use Carbon\Carbon;
 
 class ProductsTableSeeder extends Seeder
@@ -21,10 +22,14 @@ class ProductsTableSeeder extends Seeder
             ->each(function ($model) {
                 $variant = Variant::create([
                     'product_id'  => $model->id,
-                    'name'        => 'dummy variant', 
-                    'image'       => '',
+                    'name'        => 'dummy variant',
                     'stock'       => '100',
                     'description' => 'dummy description'
+                ]);
+
+                $image = Image::create([
+                    'product_id'  => $model->id,
+                    'image' => 'images/category-'.rand(1,4).'.jpg'
                 ]);
 
                 $model->stock = 100;

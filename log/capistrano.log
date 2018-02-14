@@ -1,0 +1,435 @@
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-02-03 16:07:53 +0000 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [5d991ba9] Running /usr/bin/env mkdir -p /tmp as root@159.89.205.126
+ DEBUG [5d991ba9] Command: /usr/bin/env mkdir -p /tmp
+  INFO [5d991ba9] Finished in 6.173 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 0.0%
+  INFO Uploading /tmp/git-ssh-clouwny-production-vagrant.sh 100.0%
+  INFO [0728444e] Running /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh as root@159.89.205.126
+ DEBUG [0728444e] Command: /usr/bin/env chmod 700 /tmp/git-ssh-clouwny-production-vagrant.sh
+  INFO [0728444e] Finished in 0.107 seconds with exit status 0 (successful).
+  INFO [61639584] Running /usr/bin/env git ls-remote https://github.com/grinaldo/clouwny.git HEAD as root@159.89.205.126
+ DEBUG [61639584] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env git ls-remote https://github.com/grinaldo/clouwny.git HEAD )
+ DEBUG [61639584] 	b776f2d1eda5c46591a28b39bce862ee862f544e	HEAD
+  INFO [61639584] Finished in 1.986 seconds with exit status 0 (successful).
+  INFO [786b750c] Running /usr/bin/env mkdir -p /home/clouwny/clouwny/shared /home/clouwny/clouwny/releases as root@159.89.205.126
+ DEBUG [786b750c] Command: /usr/bin/env mkdir -p /home/clouwny/clouwny/shared /home/clouwny/clouwny/releases
+  INFO [786b750c] Finished in 0.107 seconds with exit status 0 (successful).
+  INFO [90ea3596] Running /usr/bin/env mkdir -p /home/clouwny/clouwny/shared/storage/logs as root@159.89.205.126
+ DEBUG [90ea3596] Command: /usr/bin/env mkdir -p /home/clouwny/clouwny/shared/storage/logs
+  INFO [90ea3596] Finished in 0.145 seconds with exit status 0 (successful).
+  INFO [17d25097] Running /usr/bin/env mkdir -p /home/clouwny/clouwny/shared as root@159.89.205.126
+ DEBUG [17d25097] Command: /usr/bin/env mkdir -p /home/clouwny/clouwny/shared
+  INFO [17d25097] Finished in 0.118 seconds with exit status 0 (successful).
+ DEBUG [c6fdc017] Running [ -f /home/clouwny/clouwny/shared/.env ] as root@159.89.205.126
+ DEBUG [c6fdc017] Command: [ -f /home/clouwny/clouwny/shared/.env ]
+ DEBUG [c6fdc017] Finished in 0.110 seconds with exit status 0 (successful).
+ DEBUG [276f2fbe] Running [ -f /home/clouwny/clouwny/current/REVISION ] as root@159.89.205.126
+ DEBUG [276f2fbe] Command: [ -f /home/clouwny/clouwny/current/REVISION ]
+ DEBUG [276f2fbe] Finished in 0.103 seconds with exit status 0 (successful).
+ DEBUG [7d6cd1d3] Running /usr/bin/env cat /home/clouwny/clouwny/current/REVISION 2>/dev/null as root@159.89.205.126
+ DEBUG [7d6cd1d3] Command: /usr/bin/env cat /home/clouwny/clouwny/current/REVISION 2>/dev/null
+ DEBUG [7d6cd1d3] 	4bffabeee5b8ebad556d4e2b7b14c350d31a0c53
+ DEBUG [7d6cd1d3] Finished in 0.114 seconds with exit status 0 (successful).
+ DEBUG [d4eff074] Running [ -f /home/clouwny/clouwny/repo/HEAD ] as root@159.89.205.126
+ DEBUG [d4eff074] Command: [ -f /home/clouwny/clouwny/repo/HEAD ]
+ DEBUG [d4eff074] Finished in 0.123 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /home/clouwny/clouwny/repo
+ DEBUG [e9c8f7a9] Running if test ! -d /home/clouwny/clouwny/repo; then echo "Directory does not exist '/home/clouwny/clouwny/repo'" 1>&2; false; fi as root@159.89.205.126
+ DEBUG [e9c8f7a9] Command: if test ! -d /home/clouwny/clouwny/repo; then echo "Directory does not exist '/home/clouwny/clouwny/repo'" 1>&2; false; fi
+ DEBUG [e9c8f7a9] Finished in 0.109 seconds with exit status 0 (successful).
+  INFO [19ed042e] Running /usr/bin/env git remote set-url origin https://github.com/grinaldo/clouwny.git as root@159.89.205.126
+ DEBUG [19ed042e] Command: cd /home/clouwny/clouwny/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env git remote set-url origin https://github.com/grinaldo/clouwny.git )
+  INFO [19ed042e] Finished in 0.121 seconds with exit status 0 (successful).
+  INFO [5bb10c5e] Running /usr/bin/env git remote update --prune as root@159.89.205.126
+ DEBUG [5bb10c5e] Command: cd /home/clouwny/clouwny/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [5bb10c5e] 	Fetching origin
+ DEBUG [5bb10c5e] 	From https://github.com/grinaldo/clouwny
+   4bffabe..b776f2d  master     -> master
+  INFO [5bb10c5e] Finished in 1.647 seconds with exit status 0 (successful).
+ DEBUG [f238851d] Running if test ! -d /home/clouwny/clouwny/repo; then echo "Directory does not exist '/home/clouwny/clouwny/repo'" 1>&2; false; fi as root@159.89.205.126
+ DEBUG [f238851d] Command: if test ! -d /home/clouwny/clouwny/repo; then echo "Directory does not exist '/home/clouwny/clouwny/repo'" 1>&2; false; fi
+ DEBUG [f238851d] Finished in 0.121 seconds with exit status 0 (successful).
+  INFO [da6c2190] Running /usr/bin/env mkdir -p /home/clouwny/clouwny/releases/20180203160802 as root@159.89.205.126
+ DEBUG [da6c2190] Command: cd /home/clouwny/clouwny/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env mkdir -p /home/clouwny/clouwny/releases/20180203160802 )
+  INFO [da6c2190] Finished in 0.115 seconds with exit status 0 (successful).
+  INFO [bef1c766] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /home/clouwny/clouwny/releases/20180203160802 as root@159.89.205.126
+ DEBUG [bef1c766] Command: cd /home/clouwny/clouwny/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /home/clouwny/clouwny/releases/20180203160802 )
+  INFO [bef1c766] Finished in 0.842 seconds with exit status 0 (successful).
+ DEBUG [c29c5bf6] Running if test ! -d /home/clouwny/clouwny/repo; then echo "Directory does not exist '/home/clouwny/clouwny/repo'" 1>&2; false; fi as root@159.89.205.126
+ DEBUG [c29c5bf6] Command: if test ! -d /home/clouwny/clouwny/repo; then echo "Directory does not exist '/home/clouwny/clouwny/repo'" 1>&2; false; fi
+ DEBUG [c29c5bf6] Finished in 0.115 seconds with exit status 0 (successful).
+ DEBUG [4b10955e] Running /usr/bin/env git rev-list --max-count=1 master as root@159.89.205.126
+ DEBUG [4b10955e] Command: cd /home/clouwny/clouwny/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-clouwny-production-vagrant.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [4b10955e] 	b776f2d1eda5c46591a28b39bce862ee862f544e
+ DEBUG [4b10955e] Finished in 0.115 seconds with exit status 0 (successful).
+ DEBUG [52519db8] Running if test ! -d /home/clouwny/clouwny/releases/20180203160802; then echo "Directory does not exist '/home/clouwny/clouwny/releases/20180203160802'" 1>&2; false; fi as root@159.89.205.126
+ DEBUG [52519db8] Command: if test ! -d /home/clouwny/clouwny/releases/20180203160802; then echo "Directory does not exist '/home/clouwny/clouwny/releases/20180203160802'" 1>&2; false; fi
+ DEBUG [52519db8] Finished in 0.113 seconds with exit status 0 (successful).
+  INFO [833dd2f7] Running /usr/bin/env echo "b776f2d1eda5c46591a28b39bce862ee862f544e" >> REVISION as root@159.89.205.126
+ DEBUG [833dd2f7] Command: cd /home/clouwny/clouwny/releases/20180203160802 && /usr/bin/env echo "b776f2d1eda5c46591a28b39bce862ee862f544e" >> REVISION
+  INFO [833dd2f7] Finished in 0.107 seconds with exit status 0 (successful).
+  INFO [5a365c76] Running /usr/bin/env mkdir -p /home/clouwny/clouwny/releases/20180203160802 as root@159.89.205.126
+ DEBUG [5a365c76] Command: /usr/bin/env mkdir -p /home/clouwny/clouwny/releases/20180203160802
+  INFO [5a365c76] Finished in 0.111 seconds with exit status 0 (successful).
+ DEBUG [37d3fe78] Running [ -L /home/clouwny/clouwny/releases/20180203160802/.env ] as root@159.89.205.126
+ DEBUG [37d3fe78] Command: [ -L /home/clouwny/clouwny/releases/20180203160802/.env ]
+ DEBUG [37d3fe78] Finished in 0.120 seconds with exit status 1 (failed).
+ DEBUG [b523d96c] Running [ -f /home/clouwny/clouwny/releases/20180203160802/.env ] as root@159.89.205.126
+ DEBUG [b523d96c] Command: [ -f /home/clouwny/clouwny/releases/20180203160802/.env ]
+ DEBUG [b523d96c] Finished in 0.112 seconds with exit status 1 (failed).
+  INFO [67f4d004] Running /usr/bin/env ln -s /home/clouwny/clouwny/shared/.env /home/clouwny/clouwny/releases/20180203160802/.env as root@159.89.205.126
+ DEBUG [67f4d004] Command: /usr/bin/env ln -s /home/clouwny/clouwny/shared/.env /home/clouwny/clouwny/releases/20180203160802/.env
+  INFO [67f4d004] Finished in 0.107 seconds with exit status 0 (successful).
+  INFO [8b9b18ff] Running /usr/bin/env mkdir -p /home/clouwny/clouwny/releases/20180203160802/storage as root@159.89.205.126
+ DEBUG [8b9b18ff] Command: /usr/bin/env mkdir -p /home/clouwny/clouwny/releases/20180203160802/storage
+  INFO [8b9b18ff] Finished in 0.107 seconds with exit status 0 (successful).
+ DEBUG [1512e92c] Running [ -L /home/clouwny/clouwny/releases/20180203160802/storage/logs ] as root@159.89.205.126
+ DEBUG [1512e92c] Command: [ -L /home/clouwny/clouwny/releases/20180203160802/storage/logs ]
+ DEBUG [1512e92c] Finished in 0.102 seconds with exit status 1 (failed).
+ DEBUG [eda353c4] Running [ -d /home/clouwny/clouwny/releases/20180203160802/storage/logs ] as root@159.89.205.126
+ DEBUG [eda353c4] Command: [ -d /home/clouwny/clouwny/releases/20180203160802/storage/logs ]
+ DEBUG [eda353c4] Finished in 0.104 seconds with exit status 0 (successful).
+  INFO [e667cd68] Running /usr/bin/env rm -rf /home/clouwny/clouwny/releases/20180203160802/storage/logs as root@159.89.205.126
+ DEBUG [e667cd68] Command: /usr/bin/env rm -rf /home/clouwny/clouwny/releases/20180203160802/storage/logs
+  INFO [e667cd68] Finished in 0.107 seconds with exit status 0 (successful).
+  INFO [45d17494] Running /usr/bin/env ln -s /home/clouwny/clouwny/shared/storage/logs /home/clouwny/clouwny/releases/20180203160802/storage/logs as root@159.89.205.126
+ DEBUG [45d17494] Command: /usr/bin/env ln -s /home/clouwny/clouwny/shared/storage/logs /home/clouwny/clouwny/releases/20180203160802/storage/logs
+  INFO [45d17494] Finished in 0.109 seconds with exit status 0 (successful).
+  INFO [f6093dab] Running chmod a+w /home/clouwny/clouwny/releases/20180203160802/storage -R as root@159.89.205.126
+ DEBUG [f6093dab] Command: chmod a+w /home/clouwny/clouwny/releases/20180203160802/storage -R
+  INFO [f6093dab] Finished in 0.112 seconds with exit status 0 (successful).
+  INFO [db0cf650] Running cd '/home/clouwny/clouwny/releases/20180203160802'; composer install as root@159.89.205.126
+ DEBUG [db0cf650] Command: cd '/home/clouwny/clouwny/releases/20180203160802'; composer install
+ DEBUG [db0cf650] 	Do not run Composer as root/super user! See https://getcomposer.org/root for details
+ DEBUG [db0cf650] 	Loading composer repositories with package information
+ DEBUG [db0cf650] 	Installing dependencies (including require-dev) from lock file
+ DEBUG [db0cf650] 	Package operations: 93 installs, 0 updates, 0 removals
+ DEBUG [db0cf650] 	  - Installing symfony/finder (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing symfony/polyfill-mbstring (v1.5.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing symfony/var-dumper (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing psr/log (1.0.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing maximebf/debugbar (1.13.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing vlucas/phpdotenv (v2.4.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/css-selector (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing tijsverkoyen/css-to-inline-styles (2.2.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/routing (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/process (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/http-foundation (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/event-dispatcher (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/debug (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/http-kernel (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/console (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing swiftmailer/swiftmailer (v5.4.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing paragonie/random_compat (v2.0.10): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing ramsey/uuid (3.7.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing symfony/translation (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing nesbot/carbon (1.22.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing mtdowling/cron-expression (v1.2.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing monolog/monolog (1.23.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing league/flysystem (1.0.41): Loading from cache
+ DEBUG [db0cf650] 	  - Installing erusev/parsedown (1.6.3): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing doctrine/inflector (v1.2.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing laravel/framework (v5.4.35): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing barryvdh/laravel-debugbar (v2.4.3): Loading from cache
+ DEBUG [db0cf650] 	  - Installing studio-42/elfinder (2.1.28): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing psr/cache (1.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing league/flysystem-cached-adapter (1.0.6): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing psr/http-message (1.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing guzzlehttp/psr7 (1.4.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing intervention/image (2.4.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing barryvdh/elfinder-flysystem-driver (v0.2.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing barryvdh/laravel-elfinder (v0.3.11): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing weotch/phpthumb (1.0.5): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing bkwld/croppa (4.5.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing cocur/slugify (v2.5): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing cviebrock/eloquent-sluggable (4.2.4): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing doctrine/lexer (v1.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing doctrine/annotations (v1.5.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing doctrine/cache (v1.7.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing doctrine/collections (v1.5.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing doctrine/common (v2.8.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing doctrine/dbal (v2.6.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing guzzlehttp/promises (v1.3.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing guzzlehttp/guzzle (6.3.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing jakub-onderka/php-console-color (0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing symfony/polyfill-util (v1.5.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing symfony/polyfill-php56 (v1.5.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing nikic/php-parser (v3.1.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing jeremeamia/superclosure (2.3.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing jakub-onderka/php-console-highlighter (v0.3.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing dnoegel/php-xdg-base-dir (0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing psy/psysh (v0.8.11): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing laravel/tinker (v1.0.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing league/glide (1.2.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing league/glide-symfony (1.0.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing league/glide-laravel (1.0.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing phpoffice/phpexcel (1.8.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing yajra/laravel-datatables-oracle (v7.10.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing laravelcollective/html (v5.4.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing yajra/laravel-datatables-html (v1.4.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing maatwebsite/excel (2.1.20): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing yajra/laravel-datatables-buttons (v1.3.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing fzaninotto/faker (v1.7.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing hamcrest/hamcrest-php (v1.2.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing mockery/mockery (0.9.9): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing webmozart/assert (1.2.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpdocumentor/reflection-common (1.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpdocumentor/type-resolver (0.3.0): Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpdocumentor/reflection-docblock (3.2.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing phpunit/php-token-stream (2.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing symfony/yaml (v3.3.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/version (2.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing sebastian/resource-operations (1.0.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/recursion-context (2.0.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/object-enumerator (2.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/global-state (1.1.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/exporter (2.0.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/environment (2.0.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/diff (1.4.3): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/comparator (1.2.4): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpunit/php-text-template (1.2.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing doctrine/instantiator (1.1.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpunit/phpunit-mock-objects (3.4.4): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpunit/php-timer (1.0.9): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpunit/php-file-iterator (1.4.2): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing sebastian/code-unit-reverse-lookup (1.0.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpunit/php-code-coverage (4.0.8): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpspec/prophecy (v1.7.0): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	  - Installing myclabs/deep-copy (1.6.1): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	  - Installing phpunit/phpunit (5.7.21): 
+ DEBUG [db0cf650] 	Loading from cache
+ DEBUG [db0cf650] 	symfony/var-dumper suggests installing ext-symfony_debug ()
+maximebf/debugbar suggests installing kriswallsmith/assetic (The best way to manage assets)
+maximebf/debugbar suggests installing predis/predis (Redis storage)
+symfony/routing suggests installing symfony/config (For using the all-in-one router or any loader)
+symfony/routing suggests installing symfony/dependency-injection (For loading routes from a service)
+symfony/routing suggests installing symfony/expression-language (For using expression matching)
+symfony/event-dispatcher suggests installing symfony/dependency-injection ()
+symfony/http-kernel suggests installing symfony/browser-kit ()
+symfony/http-kernel suggests installing symfony/class-loader ()
+symfony/http-kernel suggests installing symfony/config ()
+ DEBUG [db0cf650] 	symfony/http-kernel suggests installing symfony/dependency-injection ()
+symfony/console suggests installing symfony/filesystem ()
+paragonie/random_compat suggests installing ext-libsodium (Provides a modern crypto API that can be used to generate random bytes.)
+ramsey/uuid suggests installing ext-libsodium (Provides the PECL libsodium extension for use with the SodiumRandomGenerator)
+ramsey/uuid suggests installing ext-uuid (Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator)
+ramsey/uuid suggests installing ircmaxell/random-lib (Provides RandomLib for use with the RandomLibAdapter)
+ramsey/uuid suggests installing moontoast/math (Provides support for converting UUID to 128-bit integer (in string form).)
+ramsey/uuid suggests installing ramsey/uuid-console (A console application for generating UUIDs with ramsey/uuid)
+ DEBUG [db0cf650] 	ramsey/uuid suggests installing ramsey/uuid-doctrine (Allows the use of Ramsey\Uuid\Uuid as Doctrine field type.)
+symfony/translation suggests installing symfony/config ()
+monolog/monolog suggests installing aws/aws-sdk-php (Allow sending log messages to AWS services like DynamoDB)
+monolog/monolog suggests installing doctrine/couchdb (Allow sending log messages to a CouchDB server)
+monolog/monolog suggests installing ext-amqp (Allow sending log messages to an AMQP server (1.0+ required))
+monolog/monolog suggests installing ext-mongo (Allow sending log messages to a MongoDB server)
+monolog/monolog suggests installing graylog2/gelf-php (Allow sending log messages to a GrayLog2 server)
+ DEBUG [db0cf650] 	monolog/monolog suggests installing mongodb/mongodb (Allow sending log messages to a MongoDB server via PHP Driver)
+monolog/monolog suggests installing php-amqplib/php-amqplib (Allow sending log messages to an AMQP server using php-amqplib)
+monolog/monolog suggests installing php-console/php-console (Allow sending log messages to Google Chrome)
+ DEBUG [db0cf650] 	monolog/monolog suggests installing rollbar/rollbar (Allow sending log messages to Rollbar)
+monolog/monolog suggests installing ruflin/elastica (Allow sending log messages to an Elastic Search server)
+ DEBUG [db0cf650] 	monolog/monolog suggests installing sentry/sentry (Allow sending log messages to a Sentry server)
+league/flysystem suggests installing league/flysystem-aws-s3-v2 (Allows you to use S3 storage with AWS SDK v2)
+league/flysystem suggests installing league/flysystem-aws-s3-v3 (Allows you to use S3 storage with AWS SDK v3)
+league/flysystem suggests installing league/flysystem-azure (Allows you to use Windows Azure Blob storage)
+ DEBUG [db0cf650] 	league/flysystem suggests installing league/flysystem-eventable-filesystem (Allows you to use EventableFilesystem)
+league/flysystem suggests installing league/flysystem-rackspace (Allows you to use Rackspace Cloud Files)
+league/flysystem suggests installing league/flysystem-sftp (Allows you to use SFTP server storage via phpseclib)
+ DEBUG [db0cf650] 	league/flysystem suggests installing league/flysystem-webdav (Allows you to use WebDAV storage)
+league/flysystem suggests installing league/flysystem-ziparchive (Allows you to use ZipArchive adapter)
+league/flysystem suggests installing spatie/flysystem-dropbox (Allows you to use Dropbox storage)
+ DEBUG [db0cf650] 	league/flysystem suggests installing srmklive/flysystem-dropbox-v2 (Allows you to use Dropbox storage for PHP 5 applications)
+laravel/framework suggests installing aws/aws-sdk-php (Required to use the SQS queue driver and SES mail driver (~3.0).)
+ DEBUG [db0cf650] 	laravel/framework suggests installing league/flysystem-aws-s3-v3 (Required to use the Flysystem S3 driver (~1.0).)
+laravel/framework suggests installing league/flysystem-rackspace (Required to use the Flysystem Rackspace driver (~1.0).)
+laravel/framework suggests installing nexmo/client (Required to use the Nexmo transport (~1.0).)
+ DEBUG [db0cf650] 	laravel/framework suggests installing pda/pheanstalk (Required to use the beanstalk queue driver (~3.0).)
+laravel/framework suggests installing predis/predis (Required to use the redis cache and queue drivers (~1.0).)
+laravel/framework suggests installing pusher/pusher-php-server (Required to use the Pusher broadcast driver (~2.0).)
+ DEBUG [db0cf650] 	laravel/framework suggests installing symfony/dom-crawler (Required to use most of the crawler integration testing tools (~3.2).)
+laravel/framework suggests installing symfony/psr-http-message-bridge (Required to psr7 bridging features (0.2.*).)
+studio-42/elfinder suggests installing google/apiclient (VolumeDriver GoogleDrive require `google/apiclient:^2.0.)
+studio-42/elfinder suggests installing kunalvarma05/dropbox-php-sdk (VolumeDriver `Dropbox`2 require `kunalvarma05/dropbox-php-sdk.)
+studio-42/elfinder suggests installing nao-pon/flysystem-google-drive (require in GoogleDrive network volume mounting with Flysystem.)
+league/flysystem-cached-adapter suggests installing ext-phpredis (Pure C implemented extension for PHP)
+ DEBUG [db0cf650] 	intervention/image suggests installing ext-gd (to use GD library based image processing.)
+intervention/image suggests installing ext-imagick (to use Imagick based image processing.)
+ DEBUG [db0cf650] 	intervention/image suggests installing intervention/imagecache (Caching extension for the Intervention Image library)
+ DEBUG [db0cf650] 	doctrine/cache suggests installing alcaeus/mongo-php-adapter (Required to use legacy MongoDB driver)
+ DEBUG [db0cf650] 	psy/psysh suggests installing ext-pdo-sqlite (The doc command requires SQLite to work.)
+ DEBUG [db0cf650] 	psy/psysh suggests installing hoa/console (A pure PHP readline implementation. You'll want this if your PHP install doesn't already support readline or libedit.)
+yajra/laravel-datatables-oracle suggests installing league/fractal (Transform your api response into something you won't hate.)
+ DEBUG [db0cf650] 	
+ DEBUG [db0cf650] 	yajra/laravel-datatables-buttons suggests installing barryvdh/laravel-snappy (Allows exporting of dataTable to PDF using the print view.)
+yajra/laravel-datatables-buttons suggests installing dompdf/dompdf (Allows exporting of dataTable to PDF using the DomPDF.)
+ DEBUG [db0cf650] 	sebastian/global-state suggests installing ext-uopz (*)
+phpunit/phpunit-mock-objects suggests installing ext-soap (*)
+ DEBUG [db0cf650] 	phpunit/php-code-coverage suggests installing ext-xdebug (^2.5.1)
+ DEBUG [db0cf650] 	phpunit/phpunit suggests installing ext-xdebug (*)
+phpunit/phpunit suggests installing phpunit/php-invoker (~1.1)
+ DEBUG [db0cf650] 	Generating optimized autoload files
+ DEBUG [db0cf650] 	> Illuminate\Foundation\ComposerScripts::postInstall
+ DEBUG [db0cf650] 	> php artisan optimize
+ DEBUG [db0cf650] 	Generating optimized class loader
+ DEBUG [db0cf650] 	The compiled services file has been removed.
+  INFO [db0cf650] Finished in 5.162 seconds with exit status 0 (successful).
+  INFO [3ad52035] Running php /home/clouwny/clouwny/releases/20180203160802/artisan migrate as root@159.89.205.126
+ DEBUG [3ad52035] Command: php /home/clouwny/clouwny/releases/20180203160802/artisan migrate
+ DEBUG [3ad52035] 	Nothing to migrate.
+  INFO [3ad52035] Finished in 0.283 seconds with exit status 0 (successful).
+  INFO [f7dc6b72] Running /usr/bin/env ln -s /home/clouwny/clouwny/releases/20180203160802 /home/clouwny/clouwny/releases/current as root@159.89.205.126
+ DEBUG [f7dc6b72] Command: /usr/bin/env ln -s /home/clouwny/clouwny/releases/20180203160802 /home/clouwny/clouwny/releases/current
+  INFO [f7dc6b72] Finished in 0.124 seconds with exit status 0 (successful).
+  INFO [1888159f] Running /usr/bin/env mv /home/clouwny/clouwny/releases/current /home/clouwny/clouwny as root@159.89.205.126
+ DEBUG [1888159f] Command: /usr/bin/env mv /home/clouwny/clouwny/releases/current /home/clouwny/clouwny
+  INFO [1888159f] Finished in 0.121 seconds with exit status 0 (successful).
+ DEBUG [da81713a] Running /usr/bin/env ls -x /home/clouwny/clouwny/releases as root@159.89.205.126
+ DEBUG [da81713a] Command: /usr/bin/env ls -x /home/clouwny/clouwny/releases
+ DEBUG [da81713a] 	20180120021751	20180120055149	20180120055817	20180120060415	20180203153242
+20180203160802
+ DEBUG [da81713a] Finished in 0.121 seconds with exit status 0 (successful).
+  INFO Keeping 5 of 6 deployed releases on 159.89.205.126
+ DEBUG [53a135c5] Running [ -d /home/clouwny/clouwny/current ] as root@159.89.205.126
+ DEBUG [53a135c5] Command: [ -d /home/clouwny/clouwny/current ]
+ DEBUG [53a135c5] Finished in 0.123 seconds with exit status 0 (successful).
+ DEBUG [d6b13ed4] Running /usr/bin/env readlink /home/clouwny/clouwny/current as root@159.89.205.126
+ DEBUG [d6b13ed4] Command: /usr/bin/env readlink /home/clouwny/clouwny/current
+ DEBUG [d6b13ed4] 	/home/clouwny/clouwny/releases/20180203160802
+ DEBUG [d6b13ed4] Finished in 0.135 seconds with exit status 0 (successful).
+  INFO [d5f2bc94] Running /usr/bin/env rm -rf /home/clouwny/clouwny/releases/20180120021751 as root@159.89.205.126
+ DEBUG [d5f2bc94] Command: /usr/bin/env rm -rf /home/clouwny/clouwny/releases/20180120021751
+  INFO [d5f2bc94] Finished in 0.655 seconds with exit status 0 (successful).
+ DEBUG [a34cc211] Running if test ! -d /home/clouwny/clouwny/releases; then echo "Directory does not exist '/home/clouwny/clouwny/releases'" 1>&2; false; fi as root@159.89.205.126
+ DEBUG [a34cc211] Command: if test ! -d /home/clouwny/clouwny/releases; then echo "Directory does not exist '/home/clouwny/clouwny/releases'" 1>&2; false; fi
+ DEBUG [a34cc211] Finished in 0.107 seconds with exit status 0 (successful).
+  INFO [da5c83d0] Running /usr/bin/env echo "Branch master (at b776f2d1eda5c46591a28b39bce862ee862f544e) deployed as release 20180203160802 by vagrant" >> /home/clouwny/clouwny/revisions.log as root@159.89.205.126
+ DEBUG [da5c83d0] Command: cd /home/clouwny/clouwny/releases && /usr/bin/env echo "Branch master (at b776f2d1eda5c46591a28b39bce862ee862f544e) deployed as release 20180203160802 by vagrant" >> /home/clouwny/clouwny/revisions.log
+  INFO [da5c83d0] Finished in 0.122 seconds with exit status 0 (successful).

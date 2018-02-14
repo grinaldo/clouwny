@@ -31,9 +31,11 @@ Route::group(['as' => 'backend.'], function() {
     Route::resource('products', 'ProductController');
     // Order
     Route::get('orders/anydata', ['as' => 'orders.data', 'uses' => 'OrderController@anyData']);
+    Route::get('orders/print-orders', ['as' => 'orders.print-orders', 'uses' => 'OrderController@printOrdersIndex']);
+    Route::post('orders/tracking-number/update', ['as' => 'orders.tracking-number.update', 'uses' => 'OrderController@updateTrackingNumber']);
+    Route::get('orders/{id}/print-label', 'OrderController@printLabel');
     Route::resource('orders', 'OrderController');
     Route::post('orders/status/update', ['as' => 'orders.status.update', 'uses' => 'OrderController@updateStatus']);
-    Route::get('orders/{id}/print-label', 'OrderController@printLabel');
     // FAQ
     Route::get('faqs/anydata', ['as' => 'faqs.data', 'uses' => 'FaqController@anyData']);
     Route::resource('faqs', 'FaqController');

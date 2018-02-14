@@ -53,6 +53,7 @@ body {
 <div class="book">
     <div class="page">
         <div class="subpage">
+            @foreach($data as $model)
             <table border="1" style="border-collapse: collapse;">
                 <thead>
                     <tr>
@@ -98,9 +99,8 @@ body {
                     </tr>
                 </tbody>
             </table>
+            <br>
+            @endforeach
         </div>    
-    </div>
-    <div class="page">
-        <div class="subpage">Page 2/2</div>    
     </div>
 </div>

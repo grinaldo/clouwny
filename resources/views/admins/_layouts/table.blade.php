@@ -41,6 +41,8 @@
                                         <button class="btn btn-default" type="button">Go!</button>
                                         </span>
                                     </div> --}}
+                                    @yield('page-menu')
+
                                     @if(!empty($routePrefix))
                                     <a href="{{ route('backend.'.$routePrefix.'.create') }}" class="btn btn-xs btn-primary"><i class="fa fa-icon fa-plus"></i> Create</a>
                                     @endif

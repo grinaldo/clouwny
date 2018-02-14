@@ -8,10 +8,18 @@
 <div class="row top_tiles">
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="tile-stats">
-        <div class="icon"><i class="fa fa-user"></i></div>
-            <div class="count">{{ $users }}</div>
-            <h3>Total User</h3>
-            <p>Registered users on site</p>
+        <div class="icon"><i class="fa fa-shopping-cart"></i></div>
+            <div class="count">{{ $orders - $ov }}</div>
+            <h3>Order Fulfillment</h3>
+            <p>Orders need to be fulfilled</p>
+        </div>
+    </div>
+    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+        <div class="icon"><i class="fa fa-check-square-o"></i></div>
+        <div class="count"> {{$wallets}} </div>
+        <h3>Wallet Transaction</h3>
+        <p>Wallet transaction requested</p>
         </div>
     </div>
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -30,17 +38,9 @@
             <p>Orders coming on site</p>
         </div>
     </div>
-    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="tile-stats">
-        <div class="icon"><i class="fa fa-check-square-o"></i></div>
-        <div class="count"> {{$wallets}} </div>
-        <h3>Wallet Transaction</h3>
-        <p>Wallet transaction requested</p>
-        </div>
-    </div>
 </div>
 
-<div class="row tile_count">
+{{-- <div class="row tile_count">
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-file"></i> Open Order</span>
         <div class="count red"> {{ $orders - $ov }} </div>
@@ -56,7 +56,7 @@
         <div class="count red"> {{ $zeroStock }} </div>
         <span class="count_bottom">Need to be restocked</span>
     </div>
-</div>
+</div> --}}
 @stop
 
 @section('page-script')

@@ -26,17 +26,40 @@ Clouwny | Order Detail
         <div class="row">
             <div class="col s12" id="delivery">
                 <h4>Delivery Info</h4>
-                <p class="grey-text">
-                    <b>Latest Status: </b> {{ $order->latest_status }}
-                    <br>
-                    <b>Order Date: </b> {{ $order->created_at }}
-                    <br>
-                    <b>Shipment: </b> {{ $order->is_dropship ? 'Dropship' : 'normal' }}
-                    <br>
-                    <b>Delivery Service: </b> {{ $order->delivery_type }}
-                    <br>
-                    <b>Payment Info: </b> {{ $order->payment_method }}
-                </p>
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <td colspan="2"><b>Shipment Info</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Latest Status: </b></td>
+                            <td> {{ $order->latest_status }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Order Date: </b></td>
+                            <td>{{ $order->created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Shipment: </b></td>
+                            <td>{{ $order->is_dropship ? 'Dropship' : 'normal' }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Delivery Service: </b></td>
+                            <td>{{ $order->delivery_type }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Payment Info: </b></td>
+                            <td>{{ $order->payment_method }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Paid Price</b></td>
+                            <td>Rp. {{ number_format($order->total_fee) }},-</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
                 <table class="striped">
                     <thead>
                         <tr>
