@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Mail;
 use App\Model\Bank;
 use App\Model\Cart;
 use App\Model\Order;
@@ -14,6 +15,8 @@ use App\Model\User;
 use App\Model\Province;
 use App\Model\City;
 use App\Model\District;
+
+use Carbon\Carbon;
 
 class CartController extends Controller
 {
@@ -116,12 +119,12 @@ class CartController extends Controller
                     if (!empty($guestCart[$product->id])) {
                         $guestCart[$product->id] = [
                             'amount'             => $guestCart[$product->id]['amount'] + 1,
-                            'product_variant_id' => $product->images()->first()->id
+                            'product_variant_id' => $product->variants()->first()->id
                         ];
                     } else {
                         $guestCart[$product->id] = [
                             'amount'             => 1,
-                            'product_variant_id' => $product->images()->first()->id
+                            'product_variant_id' => $product->variants()->first()->id
                         ];
                     }
                     session()->put('guest-cart', $guestCart);
@@ -149,7 +152,8 @@ class CartController extends Controller
                             $cart = Cart::firstOrNew([
                                 'product_id'         => $product->id,
                                 'user_id'            => \Auth::user()->id,
-                                'product_variant_id' => $request->variant
+                                'product_variant_id' => $request->variant,
+                                'size'               => $request->size
                             ]);
                             if ($cart->id) {
                                 $cart->amount += $request->quantity;
@@ -281,6 +285,7 @@ class CartController extends Controller
         $rules = [
             'receiver_name'     => 'required|string',
             'receiver_phone'    => 'required|string',
+            'receiver_email'    => 'required|string',
             'receiver_province' => 'required|string',
             'receiver_city'     => 'required|string',
             'receiver_district' => 'required|string',
@@ -321,7 +326,6 @@ class CartController extends Controller
         $order->shipping_fee = (float)$shippingDetails[1];
         $order->total_fee = $shippingDetails[1] + $request->totalPrice + rand(111,999);
         $order->user_id = (\Auth::check()) ? \Auth::user()->id : null;
-        $order->latest_status = Order::ORDER_STATUS_AWAITING_PAYMENT;
 
         // Get user carts and items to be paid
         if (\Auth::check()) {
@@ -346,6 +350,9 @@ class CartController extends Controller
         $district = District::where('code', '=', $request->receiver_district)->first();
         $order->receiver_district = $district->name;
         $order->total_fee += $totalPrice;
+        $dateTime = Carbon::now();
+        $order->order_number = 'CLY-' . $dateTime->format('U') . '-' . rand(0,9999);
+        $order->latest_status = Order::ORDER_STATUS_AWAITING_PAYMENT;
         $order->save();
 
         // Set order status awaiting for payment for non wallet
@@ -378,6 +385,7 @@ class CartController extends Controller
                     'order_id'           => $order->id,
                     'product_id'         => $cart->product_id,
                     'product_variant_id' => $cart->product_variant_id,
+                    'size'               => $cart->size,
                     'amount'             => $cart->amount,
                     'sold_price'         => $cart->product()->first()->price
                 ]);
@@ -395,6 +403,24 @@ class CartController extends Controller
                 $orderItem->save();
             }
         }
+
+        // Send Email
+        \Mail::send(
+            'emails.ordercreate',
+            [
+                'title' => 'Thanks for Ordering',
+                'order' => $order
+            ], 
+            function ($message) {
+                $message->from('ov@clouwny.com', 'Clouwny');
+                $message->to(\Auth::user()->email);
+                //Attach file
+                // $message->attach($attach);
+                //Add a subject
+                $message->subject("Thanks for Ordering");
+
+            }
+        );
 
         // clear cart and redirect
         session()->flash(NOTIF_SUCCESS, 'Order success!');

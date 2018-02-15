@@ -23,10 +23,14 @@ class Controller extends BaseController
         $allCategories     = \Cache::remember('nav-all-categories', $this->cacheMedium, function () {
             return \App\Model\Category::asc()->published()->get();
         });
+        $webLogo           = \Cache::remember('web-logo', $this->cacheLong, function () {
+            return \App\Model\Page::where('name', '=', 'logo-static')->first();
+        });
 
         \View::share([
             'allCategories' => $allCategories,
-            'baseRoute'     => $this->getControllerName() 
+            'baseRoute'     => $this->getControllerName(),
+            'webLogo'       => !empty($webLogo) && !empty($webLogo->image) ? $webLogo->image : 'images/logo.png'
         ]);
     }
 

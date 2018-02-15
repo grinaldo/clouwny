@@ -19,7 +19,8 @@ class Cart extends BaseModel
         'user_id',
         'product_id',
         'product_variant_id',
-        'amount'
+        'amount',
+        'size'
     ];
 
     public static function boot()

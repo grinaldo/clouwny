@@ -48,5 +48,15 @@ class PagesTableSeeder extends Seeder
             'description'       => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo dolorum, dignissimos sit id fugit blanditiis, numquam possimus accusamus obcaecati, aspernatur nobis ipsa itaque. Perferendis aperiam excepturi ipsa dolor mollitia numquam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, iusto eum eveniet vitae temporibus, ab eaque obcaecati voluptatum molestiae itaque pariatur sapiente nam porro ea, tempora autem. Quam, harum. Cum.',
         ]);
         $model->save();
+
+        $model = new Model([
+            'name'              => 'logo-static', 
+            'title'             => 'Clouwny Logo',
+            'short_title'       => 'Clouwny Logo',
+            'short_description' => 'logo', 
+            'description'       => 'logo',
+            'image'             => 'images/logo.png',
+        ]);
+        $model->save();
     }
 }

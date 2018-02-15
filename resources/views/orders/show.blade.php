@@ -26,6 +26,7 @@ Clouwny | Order Detail
         <div class="row">
             <div class="col s12" id="delivery">
                 <h4>Delivery Info</h4>
+                <h5 class="grey-text">Order: # {{ $order->order_number }}</h5>
                 <table class="striped">
                     <thead>
                         <tr>
@@ -33,6 +34,10 @@ Clouwny | Order Detail
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td><b>Tracking Number: </b></td>
+                            <td> {{ empty($order->tracking_number) ? '-' : $order->tracking_number }}</td>
+                        </tr>
                         <tr>
                             <td><b>Latest Status: </b></td>
                             <td> {{ $order->latest_status }}</td>
@@ -121,7 +126,7 @@ Clouwny | Order Detail
                     <div class="col m6 s12">
                         <h4>Payment Confirmation</h4>
                         <p>Your contact for payment confirmation</p>
-                        {!! Form::open(['route' => 'orders.confirm']) !!}
+                        {!! Form::open(['route' => 'orders.confirm', 'files' => true]) !!}
                             {!! Form::hidden('id', $order->id) !!}
                             <div class="row">
                                 <div class="col s12">
@@ -145,6 +150,22 @@ Clouwny | Order Detail
                                         <label for="confirmation_account" class="active">Confirmation Account</label>   
                                         <input placeholder="Your Account e.g: @my_line" id="confirmation_account" type="text" class="validate form-site-input" name="confirmation_account" value="{{ $order->confirmation_account }}">
                                     </div>
+
+                                    <div class="input-field">
+                                        <div class="file-field input-field">
+                                            <div class="btn">
+                                                <span>File</span>
+                                                <input type="file" name="confirmation_image">
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text" name="">
+                                            </div>
+                                        </div>
+                                        @if(!empty($order->confirmation_image))
+                                        <img style="width:50%" src="{{ asset($order->confirmation_image) }}" alt="">
+                                        @endif
+                                    </div>
+
                                     <div class="input-field">
                                         <button class="btn-uniform" type="submit"><b>Confirm</b></button>
                                     </div>

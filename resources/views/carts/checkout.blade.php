@@ -57,12 +57,6 @@ Site Name | Checkout
                                     <label for="receiver_name" class="active">Nama Penerima</label>   
                                     <input placeholder="Name" id="receiver_name" type="text" class="validate form-site-input" name="receiver_name" value="{{ !empty(old('receiver_name')) ? old('receiver_name') : ((Auth::check()) ? Auth::user()->name : '') }}">
                                 </div>
-                                <div class="input-field col m6 s6">
-                                    <label for="receiver_phone" class="active">No. Telp</label>   
-                                    <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : ((Auth::check()) ? Auth::user()->phone : '') }}">
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="input-field col s6">
                                     @if(Auth::check())
                                     {!! Form::select('payment_method', ['transfer' => 'Transfer', 'dompet' => 'Dompet'], '', ['id' => 'payment_method']) !!}
@@ -71,9 +65,16 @@ Site Name | Checkout
                                     @endif
                                     <label>Pembayaran</label>
                                 </div>
+                                {!! Form::hidden('delivery_company', 'sicepat', ['id' => 'delivery_company']) !!}
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m6 s6">
+                                    <label for="receiver_phone" class="active">No. Telp</label>   
+                                    <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : ((Auth::check()) ? Auth::user()->phone : '') }}">
+                                </div>
                                 <div class="input-field col s6">
-                                    {!! Form::select('delivery_company', ['gojek' => 'Go-jek', 'sicepat' => 'Sicepat'], '', ['id' => 'delivery_company']) !!}
-                                    <label>Jasa Pengiriman</label>
+                                    {!! Form::email('receiver_email', (Auth::check()) ? Auth::user()->email : '') !!}
+                                    <label>Email</label>
                                 </div>
                             </div>
                             <div class="row">

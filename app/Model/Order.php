@@ -58,6 +58,7 @@ class Order extends BaseModel
         'confirmation_channel',
         'confirmation_account',
         'confirmation_transfer',
+        'confirmation_image',
         'confirmation_transfer_date',
         'confirmation_transfer_amount',
         'confirmation_payer',

@@ -29,6 +29,7 @@ class CreateOrdersTable extends Migration
             $table->string('confirmation_channel')->nullable();
             $table->string('confirmation_account')->nullable();
             $table->string('confirmation_transfer')->nullable();
+            $table->string('confirmation_image')->nullable();
             $table->dateTime('confirmation_transfer_date')->nullable();
             $table->float('confirmation_transfer_amount')->nullable();
             $table->string('confirmation_payer')->nullable();

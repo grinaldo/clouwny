@@ -92,6 +92,8 @@
                                 <th>Item</th>
                                 <th>Amount</th>
                                 <th>Sold Price</th>
+                                <th>Variant</th>
+                                <th>Size</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -101,6 +103,8 @@
                                     <td>{{ $item->product()->first()->name }}</td>
                                     <td>{{ $item->amount }}</td>
                                     <td>{{ $item->sold_price }}</td>
+                                    <td>{{ $item->productVariant()->first()->name }}</td>
+                                    <td>{{ $item->size }}</td>
                                     <td>{{ $item->amount * $item->sold_price }}</td>
                                 </tr>
                             @endforeach

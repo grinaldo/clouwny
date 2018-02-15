@@ -8,6 +8,7 @@ use App\Model\User;
 use App\Model\Product;
 use App\Model\ProductVariant;
 
+use Mail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Yajra\Datatables\Datatables;
@@ -149,6 +150,21 @@ class OrderController extends ResourceController
                 }
                 $productGet->save();
             }
+
+            // Send Email
+            \Mail::send(
+                'emails.ordership',
+                [
+                    'title' => 'Order Shipped!',
+                    'order' => $order
+                ], 
+                function ($message) use ($order) {
+                    $message->from('ov@clouwny.com', 'Clouwny');
+                    $message->to($order->receiver_email);
+                    $message->subject("Clouwny Order Shipped");
+
+                }
+            );
         }
 
         $order->save();

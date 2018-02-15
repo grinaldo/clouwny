@@ -2,7 +2,7 @@
     <nav class="no-bg no-sd block--on-top header--sticky">
         <div class="nav-wrapper no-bg no-sd">
             <a href="/" class="brand-logo center">
-                <img src="{{ asset('images/logo.png') }}" alt="">
+                <img src="{{ !empty($webLogo) ? asset($webLogo) : asset('images/logo.png') }}" alt="">
             </a>
             <ul id="nav-mobile pad-1x" class="left">
                 <li>

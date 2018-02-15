@@ -18,6 +18,7 @@ class CreateOrderItemsTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->integer('product_variant_id')->unsigned()->nullable();
+            $table->string('size')->default('M');
             $table->integer('amount')->default(1);
             $table->float('sold_price')->default(1);
             

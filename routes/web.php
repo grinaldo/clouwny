@@ -16,6 +16,9 @@
 // });
 
 Auth::routes();
+Route::get('/test', function() {
+    return view('emails.ordercreate');
+});
 // Home
 Route::get('/', 'HomeController@index')->name('home');
 // Products

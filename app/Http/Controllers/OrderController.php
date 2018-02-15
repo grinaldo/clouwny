@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Model\Bank;
 use App\Model\Order;
 use App\Model\OrderStatus;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -54,6 +55,7 @@ class OrderController extends Controller
     {
         if (\Auth::user()) {
             $order = Order::find($request->id);
+            $now = Carbon::now();
             if (!empty($order) && \Auth::user()->id == $order->user_id) {
                 $order->confirmation_channel       = $request->confirmation_channel;
                 $order->confirmation_payer         = $request->confirmation_payer;
@@ -61,6 +63,17 @@ class OrderController extends Controller
                 $order->payment_method             = $request->confirmation_transfer;
                 $order->confirmation_transfer_date = $request->confirmation_transfer_date;
                 $order->latest_status              = Order::ORDER_STATUS_AWAITING_VERIFICATION;
+                if (!empty($request->confirmation_image)) {
+                    if (!empty($order->confirmation_image) && 
+                        file_exists(public_path($order->confirmation_image))
+                    ) {
+                        unlink(public_path($order->confirmation_image));
+                    }
+                    $file = $request->file('confirmation_image');
+                    $filename = \Auth::user()->username.'-'.$now->format('Ymdhis').'.'.$file->getClientOriginalExtension();
+                    $file->move(public_path('files'), $filename);
+                    $order->confirmation_image = 'files/'.$filename;
+                }
                 $order->save();
 
                 $orderStatus = OrderStatus::firstOrCreate([

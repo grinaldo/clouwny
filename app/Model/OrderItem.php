@@ -20,7 +20,8 @@ class OrderItem extends BaseModel
         'product_id',
         'product_variant_id',
         'amount',
-        'sold_price'
+        'sold_price',
+        'size'
     ];
 
     public static function boot()
