@@ -200,19 +200,26 @@ class OrderController extends ResourceController
 
     public function printLabel($id)
     {
-        $model = Model::find($id);
-        return view('admins.orders.label', ['model' => $model]);
+        $model = Model::where('id', '=', $id)->get();
+        return view('admins.orders.print', ['data' => [$model]]);
     }
 
     public function printOrdersIndex()
     {
+        $ordersChunked = [];
         $orders = Model::where('latest_status', '<>', Model::ORDER_STATUS_SHIPPED)
             ->orWhere('latest_status', '<>', Model::ORDER_STATUS_CANCELLED)
             ->orWhere('latest_status', '<>', Model::ORDER_STATUS_REFUNDED)
             ->orWhere('latest_status', '=', null)
-            ->get();
+            ->chunk(6, function ($ogs) use (&$ordersChunked) {
+                $orderTemp = [];
+                foreach ($ogs as $og) {
+                    $orderTemp[] = $og;
+                }
+                $ordersChunked[] = $orderTemp;
+            });
         return view('admins.orders.print', [
-            'data' => $orders
+            'data' => $ordersChunked
         ]);
     }
 }
