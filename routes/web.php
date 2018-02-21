@@ -41,6 +41,7 @@ Route::post('/cart/checkout/order', 'CartController@cartCheckout')->name('checko
 Route::post('/cart/get-city', 'CartController@getCity')->name('cart.getcityprovince');
 Route::post('/cart/get-district', 'CartController@getDistrict')->name('cart.getdistrictcity');
 Route::post('/cart/get-tariff', 'CartController@getTariff')->name('cart.gettariff');
+Route::get('/orders/thank-you/guest/{orderid}', 'CartController@thanksGuest')->name('orders.thanksguest');
 Route::get('/orders/thank-you/{id}', 'CartController@thanks')->name('orders.thanks');
 Route::post('/orders/thank-you', 'CartController@thanksConfirm')->name('orders.thanks.confirm');
 // Orders

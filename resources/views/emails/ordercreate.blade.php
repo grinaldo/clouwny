@@ -517,12 +517,12 @@
                                                                 </div>
                                                                 <div style="Margin-left: 20px;Margin-right: 20px;">
                                                                     <div class="btn btn--flat btn--medium" style="Margin-bottom: 20px;text-align: center;">
-                                                                        <![if !mso]><a style="border-radius: 4px;display: inline-block;font-size: 12px;font-weight: bold;line-height: 22px;padding: 10px 20px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #ffffff !important;background-color: #de5959;font-family: Avenir, sans-serif;" href="http://clouwny.com/orders">See My Orders</a><![endif]>
+                                                                        <![if !mso]><a style="border-radius: 4px;display: inline-block;font-size: 12px;font-weight: bold;line-height: 22px;padding: 10px 20px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #ffffff !important;background-color: #de5959;font-family: Avenir, sans-serif;" href="{{ ($user) ? 'http://clouwny.com/orders' : 'http://clouwny.com/orders/thank-you/guest/'.$order->order_number }}">{{ ($user) ? 'See My Orders' : 'Confirm Order'}}</a><![endif]>
                                                                         <!--[if mso]>
                                                                         <p style="line-height:0;margin:0;">&nbsp;</p>
                                                                         <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="http://clouwny.com/orders" style="width:124px" arcsize="10%" fillcolor="#DE5959" stroke="f">
                                                                             <v:textbox style="mso-fit-shape-to-text:t" inset="0px,9px,0px,9px">
-                                                                                <center style="font-size:12px;line-height:22px;color:#FFFFFF;font-family:Avenir,sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">See My Orders</center>
+                                                                                <center style="font-size:12px;line-height:22px;color:#FFFFFF;font-family:Avenir,sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">{{ ($user) ? 'See My Orders' : 'Confirm Order'}}</center>
                                                                             </v:textbox>
                                                                         </v:roundrect>
                                                                         <![endif]-->
@@ -599,7 +599,7 @@
                                                 Please make sure to fulfill your order payment according to the amount within <b>1 x 24 hours</b>
                                             </p>
                                             <b style="font-size: 14px; font-family: verdana;">
-                                                Please don't forget to verify your order as well on our <a href="http://clouwny.com/orders" style="color: #ff7f7f;">order detail page</a>
+                                                Please don't forget to verify your order as well on our <a href="{{ ($user) ? 'http://clouwny.com/orders' : 'http://clouwny.com/orders/thank-you/guest/'.$order->order_number }}" style="color: #ff7f7f;"> {{ ($user) ? 'order detail page' : 'confirmation page'}}</a>
                                             </b>
                                         </div>
                                     </div>

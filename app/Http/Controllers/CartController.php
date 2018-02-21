@@ -419,7 +419,8 @@ class CartController extends Controller
             'emails.ordercreate',
             [
                 'title' => 'Thanks for Ordering',
-                'order' => $order
+                'order' => $order,
+                'user'  => (\Auth::check()) ? true : false
             ], 
             function ($message) use ($request) {
                 $message->from('ov@clouwny.com', 'Clouwny');
@@ -474,6 +475,25 @@ class CartController extends Controller
         return redirect()->route('home');
     }
 
+    public function thanksGuest($orderid)
+    {
+        $order = Order::where('order_number', '=', $orderid)->first();
+        if (empty($order->user_id)) {
+            $banks = Bank::orderBy('bank_name', 'asc')->get();
+            $banksGet = [];
+            foreach ($banks as $bank) {
+                $banksGet[$bank->bank_name.' | '.$bank->account_name ] = '[' . $bank->bank_name.'] '.$bank->account_name . ' | ' . $bank->account_number;
+            }
+            return view('orders.thanksguest', [
+                'id'       => $order->id,
+                'totalFee' => $order->total_fee,
+                'banks'    => $banksGet
+            ]);
+        }
+        session()->flash(NOTIF_DANGER, 'You have no privilege!');
+        return redirect()->route('home');
+    }
+
     public function thanksConfirm(Request $request)
     {
         $rules = [
@@ -482,6 +502,7 @@ class CartController extends Controller
             'confirmation_account'   => 'required|string',
             'confirmation_payer'     => 'sometimes|nullable|string',
             'confirmation_transfer'  => 'required|string',
+            'confirmation_image'     => '',
         ];
         $validator = \Validator::make($request->all(), $rules);
         if (!$validator->passes()) {
@@ -489,15 +510,30 @@ class CartController extends Controller
             return redirect()->back()->withInput();
         }
         $order = Order::find($request->id);
-        if (\Auth::user()->id !== $order->user_id) {
-            session()->flash(NOTIF_DANGER, 'You have no privilege');
-            return redirect()->back()->withInput();
-        }
+        if (!empty($order->user_id)) {
+            if (\Auth::user()->id !== $order->user_id) {
+                session()->flash(NOTIF_DANGER, 'You have no privilege');
+                return redirect()->back()->withInput();
+            }
+        } 
         $order->confirmation_account  = $request->confirmation_account;
         $order->confirmation_channel  = $request->confirmation_channel;
         $order->confirmation_payer    = $request->confirmation_payer;
         $order->confirmation_transfer = $request->confirmation_transfer;
         $order->latest_status         = Order::ORDER_STATUS_AWAITING_VERIFICATION;
+        if (!empty($request->confirmation_image)) {
+            if (!empty($order->confirmation_image) && 
+                file_exists(public_path($order->confirmation_image))
+            ) {
+                unlink(public_path($order->confirmation_image));
+            }
+            $file     = $request->file('confirmation_image');
+            $now      = Carbon::now();
+            $username = (\Auth::check()) ? \Auth::user()->username : 'guest';
+            $filename = $username.'-'.$now->format('Ymdhis').'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('files'), $filename);
+            $order->confirmation_image = 'files/'.$filename;
+        }
         $order->save();
 
         $orderStatus = OrderStatus::firstOrCreate([
@@ -506,7 +542,10 @@ class CartController extends Controller
         ]);
 
         session()->flash(NOTIF_SUCCESS, 'Thanks for confirming the order.');
-        return redirect()->route('orders');
+        if (\Auth::check()) {
+            return redirect()->route('orders');
+        }
+        return redirect()->route('home');
     }
 
     public function getCity(Request $request)
