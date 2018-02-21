@@ -66,7 +66,7 @@ function initChangeTN(e, el) {
             dataType: 'JSON',
             /* remind that 'data' is the response of the AjaxController */
             success: function success(data) {
-                var content = '<div class="tn-container">'+data.tracking_number+'</div> <b><a href="#" class="edit-tn" onclick="initTNBar(this)">[<i class="fa fa-icon fa-edit"></i> edit]</a></b>'
+                var content = '<div class="tn-container">'+data.tracking_number+'</div> <b><a href="#" class="edit-tn" onclick="initTNBar(this)">[<i class="fa fa-icon fa-edit"></i> edit]</a></b>';
                 $(el).parent().html(content);
             },
             error: function error(data) {

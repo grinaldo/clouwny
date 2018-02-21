@@ -192,6 +192,58 @@ class OrderController extends ResourceController
                         'message' => 'Product has been added',
                         'tracking_number' => $request->tracking_number,
                     ];
+
+                    $shippedOrderCount = OrderStatus::where('order_id', '=', $order->id)
+                        ->where('status', '=', Model::ORDER_STATUS_SHIPPED)
+                        ->count();
+                    $productToDeplete = [];
+                    if ($shippedOrderCount == 0) {
+                        foreach ($order->orderItems()->get() as $variant) {
+                            if (!empty($productToDeplete[$variant->product_id]) && 
+                                count($productToDeplete[$variant->product_id]) 
+                            ) {
+                                $productToDeplete[$variant->product_id][$variant->product_variant_id] += $variant->amount;
+                            } else {
+                                $productToDeplete[$variant->product_id][$variant->product_variant_id] = $variant->amount;
+                            }
+                        }
+                        foreach ($productToDeplete as $key => $ptd) {
+                            $productGet = Product::find($key);
+                            foreach ($ptd as $pkey => $pv) {
+                                $variantGet = ProductVariant::find($pkey);
+                                if (!empty($variantGet)) {
+                                    $variantGet->stock -= $pv;
+                                    $variantGet->save();
+                                    $productGet->stock -= $pv;
+                                }
+                            }
+                            $productGet->save();
+                        }
+
+                        // Send Email
+                        \Mail::send(
+                            'emails.ordership',
+                            [
+                                'title' => 'Order Shipped!',
+                                'order' => $order
+                            ], 
+                            function ($message) use ($order) {
+                                $message->from('ov@clouwny.com', 'Clouwny');
+                                $message->to($order->receiver_email);
+                                $message->subject("Clouwny Order Shipped");
+
+                            }
+                        );
+                        $order->latest_status = Model::ORDER_STATUS_SHIPPED;
+                        $order->save();
+                        $orderStatus = OrderStatus::firstOrCreate([
+                            'order_id' => $order->id,
+                            'status'   => Model::ORDER_STATUS_SHIPPED
+                        ]);
+                        if (!$orderStatus->id) {
+                            $orderStatus->save();
+                        }
+                    }
                 }
             } 
             return response()->json($response); 
