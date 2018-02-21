@@ -243,6 +243,7 @@ class CartController extends Controller
             $sicepatProvinces    = \Cache::get('sicepat-provinces-all');
             if (empty($sicepatProvinces)) {
                 $sicepatProvinces = Province::orderBy('name', 'ASC')->pluck('name', 'name');
+                $sicepatProvinces->prepend('-- Pilih Provinsi --', '');
             }
             return view('carts.checkout', [
                 'profileNav'      => 'cart',
@@ -266,6 +267,7 @@ class CartController extends Controller
             $sicepatProvinces    = \Cache::get('sicepat-provinces-all');
             if (empty($sicepatProvinces)) {
                 $sicepatProvinces = Province::orderBy('name', 'ASC')->pluck('name', 'name');
+                $sicepatProvinces->prepend('-- Pilih Provinsi --', '');
             }
             return view('carts.checkout', [
                 'profileNav'      => 'cart',
@@ -285,7 +287,7 @@ class CartController extends Controller
         $rules = [
             'receiver_name'     => 'required|string',
             'receiver_phone'    => 'required|string',
-            'receiver_email'    => 'required|string',
+            'receiver_email'    => 'required|string|email',
             'receiver_province' => 'required|string',
             'receiver_city'     => 'required|string',
             'receiver_district' => 'required|string',
@@ -295,14 +297,14 @@ class CartController extends Controller
             'is_dropship'       => '',
             // 'delivery_type'     => 'required|string',
         ];
-        if (!\Auth::check()) {
-            $rules[] = [
-                'guest_name'         => 'required|string',
-                'guest_email'        => 'required|string',
-                'guest_phone'        => 'required|string',
-                'guest_confirmation' => 'required|string',
-            ];
-        }
+        // if (!\Auth::check()) {
+        //     $rules[] = [
+        //         'guest_name'         => 'required|string',
+        //         'guest_email'        => 'required|string|email',
+        //         'guest_phone'        => 'required|string',
+        //         'guest_confirmation' => 'required|string',
+        //     ];
+        // }
         $validator = \Validator::make($request->all(), $rules);
         if (!$validator->passes()) {
             session()->flash(NOTIF_DANGER, 'Please check input data correctly!');
@@ -336,9 +338,17 @@ class CartController extends Controller
 
         // Check if wallet balance is enough
         $totalPrice = 0;
-        foreach ($carts as $item) {
-            $totalPrice += $item->amount * $item->product()->first()->price;
+        if (\Auth::check()) {
+            foreach ($carts as $item) {
+                $totalPrice += $item->amount * $item->product()->first()->price;
+            }
+        } else {
+            foreach ($carts as $item) {
+                $totalPrice += $item['quantity'] * $item['product']->price;
+            }
         }
+
+        // applied to logged in user only
         if ($order->payment_method == 'wallet') {
             if (\Auth::user()->wallet - $totalPrice < 0) {
                 session()->flash(NOTIF_DANGER, 'Not enough balance on your wallet!');
@@ -411,9 +421,13 @@ class CartController extends Controller
                 'title' => 'Thanks for Ordering',
                 'order' => $order
             ], 
-            function ($message) {
+            function ($message) use ($request) {
                 $message->from('ov@clouwny.com', 'Clouwny');
-                $message->to(\Auth::user()->email);
+                $email = $request->receiver_email;
+                if (\Auth::check()) {
+                    $email = \Auth::user()->email;
+                }
+                $message->to($email);
                 //Attach file
                 // $message->attach($attach);
                 //Add a subject

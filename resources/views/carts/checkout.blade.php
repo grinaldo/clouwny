@@ -30,7 +30,7 @@ Site Name | Checkout
                     <div class="row">
                         <div id="delivery" class="col s12">
                             {{ csrf_field() }}
-                            @if(!Auth::check()) 
+                            {{-- @if(!Auth::check()) 
                             <div class="row">
                                 <div class="input-field col m6 s6">
                                     <label for="guest_name" class="active">Nama Pembeli</label>   
@@ -51,7 +51,7 @@ Site Name | Checkout
                                     <input placeholder="Line @myline, Whatsapp, etc" id="guest_confirmation" type="text" class="validate form-site-input" name="guest_confirmation" value="{{ !empty(old('guest_confirmation')) ? old('guest_confirmation') : '' }}">
                                 </div>
                             </div>
-                            @endif
+                            @endif --}}
                             <div class="row">
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_name" class="active">Nama Penerima</label>   
