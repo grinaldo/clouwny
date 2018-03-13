@@ -144,3 +144,22 @@ clear-height {
     right: 0;
     width: 20%;
 }
+
+.product-search__container {
+    position:relative;
+    float: none;
+    margin-top: 1.5em !important;
+    i, .product-search {
+        float: left;
+    }
+    i {
+        margin-top: 20px;
+        width: 5%;
+        margin-left: -10px;
+    }
+    .product-search {
+        border-bottom: 2px solid grey !important;
+        width: 90% !important;
+        margin-left: 20px !important;
+    }
+}

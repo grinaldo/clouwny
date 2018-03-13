@@ -17,7 +17,7 @@ Clouwny | All Collection
 <section class="section">
     <div class="container container--mid-container">
         <div class="row">
-            <div class="col s12 m12">
+            <div class="col s12 m9">
                 @if(empty($categorySelected))
                 <h3>Clouwny Collections</h3>
                 <p>Here in <b>Clouwny</b> we provide the high quality women wears with interesting price for you fashion lovers. We have wide range of collections from dressing, accessories, and so on to fulfill your fashion needs. </p>
@@ -25,6 +25,11 @@ Clouwny | All Collection
                 <h3>{{ $categorySelected->name }}</h3>
                 <p>{{ $categorySelected->description }}</p>
                 @endif
+            </div>
+            <div class="col s12 m3 nav-wrapper">
+                <div class="product-search__container">
+                    <i class="fa fa-icon fa-search grey-text"></i><input id="product-search" class="product-search" type="search" data-baseurl="{{url('products')}}">
+                </div>
             </div>
             <div class="divider"></div>
         </div>
@@ -132,4 +137,13 @@ Clouwny | All Collection
 @endsection
 
 @section('page-script')
+<script type="text/javascript">
+$('.product-search').keypress(function (e) {
+    if (e.which == 13) {
+        var baseurl = $('.product-search').data('baseurl');
+        window.location.href = baseurl + '?name=' + $('.product-search').val();
+        return false;    //<---- Add this line
+    }
+});
+</script>
 @endsection

@@ -8,9 +8,14 @@ use App\Model\Product;
 
 class ProductController extends Controller
 {
-    public function index() 
+    public function index(Request $request) 
     {
-        $products = Product::published()->asc()->newest()->paginate(12);
+
+        $products = Product::published()->asc()->newest();
+        if ($request->has('name')) {
+            $products = $products->where('name', 'like', '%'.$request->name.'%');
+        }
+        $products = $products->paginate(12);
         return view('products.index', [
             'products' => $products
         ]);
