@@ -1,6 +1,6 @@
 # set :stage, :staging
 
-role :app, %w{root@159.89.205.126}
+role :app, %w{clouwny@206.189.95.208}
 
 set :deploy_to, '/home/clouwny/clouwny'
 ask(:password, nil, echo: false)
@@ -13,7 +13,7 @@ ask(:password, nil, echo: false)
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-server '159.89.205.126', user: 'root', my_property: :my_value
+server '206.189.95.208', user: 'clouwny', my_property: :my_value
 
 
 

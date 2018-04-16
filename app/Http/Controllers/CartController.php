@@ -181,7 +181,7 @@ class CartController extends Controller
                             ];
                         } else {
                             $guestCart[$product->id] = [
-                                'amount'             => 1,
+                                'amount'             => (int)$request->quantity,
                                 'product_variant_id' => $product->images()->first()->id
                             ];
                         }
