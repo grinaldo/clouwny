@@ -61,7 +61,7 @@ class OrderController extends Controller
                 $order->confirmation_payer         = $request->confirmation_payer;
                 $order->confirmation_account       = $request->confirmation_account;
                 $order->payment_method             = $request->confirmation_transfer;
-                $order->confirmation_transfer_date = $request->confirmation_transfer_date;
+                $order->confirmation_transfer_date = $request->confirmation_date;
                 $order->latest_status              = Order::ORDER_STATUS_AWAITING_VERIFICATION;
                 if (!empty($request->confirmation_image)) {
                     if (!empty($order->confirmation_image) && 

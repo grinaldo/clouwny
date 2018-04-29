@@ -23,6 +23,8 @@
             </li>
             <li role="presentation" class=""><a href="#tab_content4" role="tab" id="status-tab" data-toggle="tab" aria-expanded="false">Status</a>
             </li>
+            <li role="presentation" class=""><a href="#tab_content5" role="tab" id="status-tab" data-toggle="tab" aria-expanded="false">Confirmation</a>
+            </li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="order-tab">
@@ -258,6 +260,48 @@
                             {!! Form::close() !!}
                         </div>
                     </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="shipper-tab">
+                <div class="x_panel">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Confirmation</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Channel</td>
+                                <td>{{ $model->confirmation_channel }}</td>
+                            </tr>
+                            <tr>
+                                <td>Payer</td>
+                                <td>{{ $model->confirmation_payer }}</td>
+                            </tr>
+                            <tr>
+                                <td>Account</td>
+                                <td>{{ $model->confirmation_account }}</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Method</td>
+                                <td>{{ $model->payment_method }}</td>
+                            </tr>
+                            <tr>
+                                <td>Transfer Date</td>
+                                <td>{{ $model->confirmation_transfer_date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Image</td>
+                                <td>
+                                    @if (!empty($model->confirmation_image))
+                                    <img width ="400" src="{{ asset($model->confirmation_image) }}" alt="">
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

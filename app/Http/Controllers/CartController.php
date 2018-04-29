@@ -147,7 +147,7 @@ class CartController extends Controller
                     if ($request->variant == '-') {
                         session()->flash(NOTIF_DANGER, 'Please select the variant');
                     } else {
-                        $product = Product::select('id')->where('slug', '=', $request->product)->first();
+                        $product = Product::select('id', 'name', 'price')->where('slug', '=', $request->product)->first();
                         if (!empty($product)) {
                             $cart = Cart::firstOrNew([
                                 'product_id'         => $product->id,
@@ -162,6 +162,7 @@ class CartController extends Controller
                             }
                             $cart->save();
                             session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
+                            session()->put('cart_added', [$product->name, $cart->amount, $product->price]);
                             return redirect()->route('cart');
                         } else {
                             session()->flash(NOTIF_DANGER, 'Invalid Request!');
@@ -172,7 +173,7 @@ class CartController extends Controller
                     if (session()->has('guest-cart')) {
                         $guestCart = session()->pull('guest-cart');
                     }
-                    $product = Product::select('id')->where('slug', '=', $request->product)->first();
+                    $product = Product::select('id', 'name', 'price')->where('slug', '=', $request->product)->first();
                     if (!empty($product)) {
                         if (!empty($guestCart[$product->id])) {
                             $guestCart[$product->id] = [
@@ -187,6 +188,7 @@ class CartController extends Controller
                         }
                         session()->put('guest-cart', $guestCart);
                     }
+                    session()->put('cart_added', [$product->name, $request->quantity, $product->price]);
                     session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
                 }
             } else {
