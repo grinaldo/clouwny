@@ -14,7 +14,7 @@
             <div class="journey-box__shop-menu">
                 <ul>
                     <li><a href="{{url('products')}}">Lanjutkan Belanja</a></li>
-                    <li><a href="{{url('cart/checkout')}}">Checkout</a></li>
+                    <li><a href="{{url('cart')}}">Checkout</a></li>
                 </ul>
             </div>
         </div>

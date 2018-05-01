@@ -686,7 +686,7 @@ $product-box-shadow: 0px 0px 0px 1px $light-gray;
                     display: block;
                     @media only screen and (min-width: 40.063em) {
                         display: inline-block;
-                        margin: 2em;
+                        margin: 0 2em;
                     }
                     cursor: pointer;
                     a {
