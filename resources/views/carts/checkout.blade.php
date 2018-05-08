@@ -54,7 +54,10 @@ Site Name | Checkout
                             @endif --}}
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_name" class="active">Nama Penerima</label>   
+                                    <label for="receiver_name" class="active">
+                                        Nama Penerima
+                                        <span style="color:red !important">*</span>
+                                    </label>   
                                     <input placeholder="Name" id="receiver_name" type="text" class="validate form-site-input" name="receiver_name" value="{{ !empty(old('receiver_name')) ? old('receiver_name') : ((Auth::check()) ? Auth::user()->name : '') }}">
                                 </div>
                                 <div class="input-field col s6">
@@ -63,23 +66,35 @@ Site Name | Checkout
                                     @else 
                                     {!! Form::select('payment_method', ['transfer' => 'Transfer'], '', ['id' => 'payment_method']) !!}
                                     @endif
-                                    <label>Pembayaran</label>
+                                    <label>
+                                        Pembayaran
+                                        <span style="color:red !important">*</span>
+                                    </label>
                                 </div>
                                 {!! Form::hidden('delivery_company', 'sicepat', ['id' => 'delivery_company']) !!}
                             </div>
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_phone" class="active">No. Telp</label>   
+                                    <label for="receiver_phone" class="active">
+                                        No. Telp
+                                        <span style="color:red !important">*</span>
+                                    </label>   
                                     <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : ((Auth::check()) ? Auth::user()->phone : '') }}">
                                 </div>
                                 <div class="input-field col s6">
                                     {!! Form::email('receiver_email', (Auth::check()) ? Auth::user()->email : '') !!}
-                                    <label>Email</label>
+                                    <label>
+                                        Email
+                                        <span style="color:red !important">*</span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_province" class="active">Provinsi</label>   
+                                    <label for="receiver_province" class="active">
+                                        Provinsi
+                                        <span style="color:red !important">*</span>
+                                    </label>   
                                     {!! Form::select('receiver_province', $provinces, '', ['id' => 'receiver_province']) !!}
                                 </div>
                                 <div class="input-field col m6 s6">
@@ -89,7 +104,10 @@ Site Name | Checkout
                             </div>
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="receiver_district" id="receiver_district_label" class="active">Kecamatan</label>   
+                                    <label for="receiver_district" id="receiver_district_label" class="active">
+                                        Kecamatan
+                                        <span style="color:red !important">*</span>
+                                    </label>   
                                     {!! Form::select('receiver_district', ['-', '-'], '', ['id' => 'receiver_district']) !!}
                                 </div>
                                 <div class="input-field col m6 s6">
@@ -99,7 +117,10 @@ Site Name | Checkout
                             </div>
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <label for="address">Address</label>
+                                    <label for="address">
+                                        Address
+                                        <span style="color:red !important">*</span>
+                                    </label>
                                     <textarea id="address" class="form-site-input materialize-textarea" name="receiver_address">{{ !empty(old('receiver_address')) ? old('receiver_address') : ((Auth::check()) ? Auth::user()->address : '') }}</textarea>
                                 </div>
                             </div>
