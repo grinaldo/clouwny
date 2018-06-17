@@ -29,6 +29,9 @@ Route::group(['as' => 'backend.'], function() {
     // Product
     Route::get('products/anydata', ['as' => 'products.data', 'uses' => 'ProductController@anyData']);
     Route::resource('products', 'ProductController');
+    // Promo Codes
+    Route::get('promo-codes/anydata', ['as' => 'promo-codes.data', 'uses' => 'PromoCodeController@anyData']);
+    Route::resource('promo-codes', 'PromoCodeController');
     // Order
     Route::get('orders/anydata', ['as' => 'orders.data', 'uses' => 'OrderController@anyData']);
     Route::get('orders/print-orders', ['as' => 'orders.print-orders', 'uses' => 'OrderController@printOrdersIndex']);

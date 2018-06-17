@@ -138,6 +138,54 @@ $('.rm-wishlist-btn').click(function(e) {
     return false;
 });
 
+
+// Promo Code typing timer
+//setup before functions
+var typingTimer;                //timer identifier
+var doneTypingInterval = 1000;  //time in ms, 5 second for example
+var $promoInput = $('#promo_code');
+
+//on keyup, start the countdown
+$promoInput.on('keyup', function () {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(donePromoInputTyping, doneTypingInterval);
+});
+
+//on keydown, clear the countdown 
+$promoInput.on('keydown', function () {
+    clearTimeout(typingTimer);
+});
+
+//user is "finished typing," do something
+function donePromoInputTyping() {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var promotion = $promoInput.val();
+    if (promotion.length) {
+        console.log('test in');
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/promotions/check',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {_token: csrf, promotion: promotion},
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function success(data) {
+                var promoInfo = data.data.toString();
+                $('#promo-info').html(promoInfo);
+            },
+            error: function error(data) {
+                if (!$('.alert-box').length) {
+                    $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                }
+                $('#promo-info').empty();
+            }
+        });
+    } else {
+        $('#promo-info').empty();
+    }
+}
+
 var initProvinceSelect = function() {
     if ($('#receiver_province').length) {
         $('#receiver_province').change(function() {
@@ -294,7 +342,6 @@ var initGetTariffShipper = function () {
         });
     }
 }
-
 
 $(window).scroll(function(){
     var scroll = $(window).scrollTop(),

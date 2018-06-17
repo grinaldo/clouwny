@@ -53,6 +53,11 @@ class CreateOrdersTable extends Migration
             $table->string('receiver_zipcode')->nullable();
             $table->string('receiver_address');
             $table->string('payment_method');
+
+            $table->string('promotion')->nullable();
+            $table->integer('discount')->default(0);
+            $table->integer('discount_limit')->default(0);
+            $table->integer('deduction')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')

@@ -79,11 +79,23 @@
                             </tr>
                             <tr>
                                 <td>Shipping Fee</td>
-                                <td>{{ $model->shipping_fee }}</td>
+                                <td>{{ number_format($model->shipping_fee) }}</td>
                             </tr>
                             <tr>
                                 <td>Paid Price</td>
-                                <td>{{ $model->total_fee }}</td>
+                                <td>{{ number_format($model->total_fee) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Promotions</td>
+                                <td>
+                                    <b>Promo Code: </b>{{ $model->promotion }}
+                                    <br>
+                                    <b>Discount: </b> {{ $model->discount }} %
+                                    <br>
+                                    <b>Discount Limit: </b> {{ number_format($model->discount_limit) }}
+                                    <br>
+                                    <b>Discounted Value: </b> {{ number_format($model->deduction) }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -103,11 +115,11 @@
                             @foreach($model->orderItems()->get() as $item)
                                 <tr>
                                     <td>{{ $item->product()->first()->name }}</td>
-                                    <td>{{ $item->amount }}</td>
-                                    <td>{{ $item->sold_price }}</td>
+                                    <td>{{ number_format($item->amount) }}</td>
+                                    <td>{{ number_format($item->sold_price) }}</td>
                                     <td>{{ $item->productVariant()->first()->name }}</td>
                                     <td>{{ $item->size }}</td>
-                                    <td>{{ $item->amount * $item->sold_price }}</td>
+                                    <td>{{ number_format($item->amount * $item->sold_price) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

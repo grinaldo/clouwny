@@ -56,7 +56,7 @@ Site Name | Checkout
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_name" class="active">
                                         Nama Penerima
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>   
                                     <input placeholder="Name" id="receiver_name" type="text" class="validate form-site-input" name="receiver_name" value="{{ !empty(old('receiver_name')) ? old('receiver_name') : ((Auth::check()) ? Auth::user()->name : '') }}">
                                 </div>
@@ -68,7 +68,7 @@ Site Name | Checkout
                                     @endif
                                     <label>
                                         Pembayaran
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>
                                 </div>
                                 {!! Form::hidden('delivery_company', 'sicepat', ['id' => 'delivery_company']) !!}
@@ -77,7 +77,7 @@ Site Name | Checkout
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_phone" class="active">
                                         No. Telp
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>   
                                     <input placeholder="Phone" id="receiver_phone" type="text" class="validate form-site-input" name="receiver_phone" value="{{ !empty(old('receiver_phone')) ? old('receiver_phone') : ((Auth::check()) ? Auth::user()->phone : '') }}">
                                 </div>
@@ -85,7 +85,7 @@ Site Name | Checkout
                                     {!! Form::email('receiver_email', (Auth::check()) ? Auth::user()->email : '') !!}
                                     <label>
                                         Email
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@ Site Name | Checkout
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_province" class="active">
                                         Provinsi
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>   
                                     {!! Form::select('receiver_province', $provinces, '', ['id' => 'receiver_province']) !!}
                                 </div>
@@ -106,7 +106,7 @@ Site Name | Checkout
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_district" id="receiver_district_label" class="active">
                                         Kecamatan
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>   
                                     {!! Form::select('receiver_district', ['-', '-'], '', ['id' => 'receiver_district']) !!}
                                 </div>
@@ -119,9 +119,22 @@ Site Name | Checkout
                                 <div class="input-field col s12">
                                     <label for="address">
                                         Address
-                                        <span style="color:red !important">*</span>
+                                        <span class="red-text">*</span>
                                     </label>
                                     <textarea id="address" class="form-site-input materialize-textarea" name="receiver_address">{{ !empty(old('receiver_address')) ? old('receiver_address') : ((Auth::check()) ? Auth::user()->address : '') }}</textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <label for="promo_code" class="active">
+                                        Promo Code
+                                    </label>
+                                    <input placeholder="Promo Code" id="promo_code" type="text" class="validate form-site-input" name="promo_code" value="{{ !empty(old('promo_code')) ? old('promo_code') : '' }}">
+                                    <div>
+                                        <b>
+                                            <small id="promo-info" class="promo-info blue-text"></small>
+                                        </b>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +221,6 @@ Site Name | Checkout
                     </tbody>
                 </table>
             </div>
-
         </div>
         <br>
         <div class="divider"></div>

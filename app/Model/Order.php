@@ -62,6 +62,10 @@ class Order extends BaseModel
         'confirmation_transfer_date',
         'confirmation_transfer_amount',
         'confirmation_payer',
+        'promotion',
+        'discount',
+        'discount_limit',
+        'deduction',
     ];
 
     public static function boot()

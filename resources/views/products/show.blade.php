@@ -83,7 +83,15 @@ Clouwny | Product - {{ $product->name }}
                 <div class="divider"></div>
                 <h5>Details</h5>
                 <p class="product-detail__addinfo">
+                    @if(!empty($product->discounted_price) && $product->discounted_price > 0)
+                    <b>
+                        <small class="red-text" style="text-decoration: line-through">Price: Rp {{ number_format($product->price) }}</small>
+                    </b>
+                    <br>
+                    <b>Price: Rp {{ number_format($product->discounted_price) }}</b>
+                    @else
                     <b>Price: Rp {{ number_format($product->price) }}</b>
+                    @endif
                     <br>
                     <b>Stock: {{ number_format($product->stock) }}</b>
                 </p>

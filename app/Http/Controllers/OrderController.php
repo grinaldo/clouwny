@@ -15,7 +15,7 @@ class OrderController extends Controller
     {
         if (\Auth::user()) {
             $orders = \Cache::remember('order-user-'.\Auth::user()->id, $this->cacheShort, function () {
-                return Order::where('user_id', '=', \Auth::user()->id)->paginate(10);
+                return Order::where('user_id', '=', \Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
             });
             return view('orders.index', [
                 'profileNav' => 'order',

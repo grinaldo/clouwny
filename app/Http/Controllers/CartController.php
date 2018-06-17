@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Mail;
 use App\Model\Bank;
 use App\Model\Cart;
+use App\Model\City;
+use App\Model\District;
 use App\Model\Order;
 use App\Model\OrderItem;
 use App\Model\OrderStatus;
 use App\Model\Product;
-use App\Model\User;
+use App\Model\PromoCode;
 use App\Model\Province;
-use App\Model\City;
-use App\Model\District;
-
+use App\Model\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Mail;
 
 class CartController extends Controller
 {
@@ -147,7 +146,7 @@ class CartController extends Controller
                     if ($request->variant == '-') {
                         session()->flash(NOTIF_DANGER, 'Please select the variant');
                     } else {
-                        $product = Product::select('id', 'name', 'price')->where('slug', '=', $request->product)->first();
+                        $product = Product::select('id', 'name', 'price', 'discounted_price')->where('slug', '=', $request->product)->first();
                         if (!empty($product)) {
                             $cart = Cart::firstOrNew([
                                 'product_id'         => $product->id,
@@ -162,7 +161,8 @@ class CartController extends Controller
                             }
                             $cart->save();
                             session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
-                            session()->put('cart_added', [$product->name, $cart->amount, $product->price]);
+                            $addedProductPrice = (!empty($product->discounted_price) && $product->discounted_price > 0) ? $product->discounted_price : $product->price;
+                            session()->put('cart_added', [$product->name, $cart->amount, $addedProductPrice]);
                             return redirect()->route('cart');
                         } else {
                             session()->flash(NOTIF_DANGER, 'Invalid Request!');
@@ -188,7 +188,8 @@ class CartController extends Controller
                         }
                         session()->put('guest-cart', $guestCart);
                     }
-                    session()->put('cart_added', [$product->name, $request->quantity, $product->price]);
+                    $addedProductPrice = (!empty($product->discounted_price) && $product->discounted_price > 0) ? $product->discounted_price : $product->price;
+                    session()->put('cart_added', [$product->name, $request->quantity, $addedProductPrice]);
                     session()->flash(NOTIF_SUCCESS, 'Successfully added to cart!');
                 }
             } else {
@@ -232,10 +233,10 @@ class CartController extends Controller
     public function checkout()
     {
         if (\Auth::check()) {
-            $carts               = Cart::where('user_id', '=', \Auth::user()->id)->get();
-            $totalPrice          = 0;
-            $totalWeight         = 0;
-            $quantity            = 0;
+            $carts       = Cart::where('user_id', '=', \Auth::user()->id)->get();
+            $totalPrice  = 0;
+            $totalWeight = 0;
+            $quantity    = 0;
             foreach ($carts as $item) {
                 $priceToAdd = ($item->product()->first()->discounted_price != 0) ? $item->product()->first()->discounted_price : $item->product()->first()->price;
                 $totalPrice  += $item->amount * $priceToAdd;
@@ -248,12 +249,12 @@ class CartController extends Controller
                 $sicepatProvinces->prepend('-- Pilih Provinsi --', '');
             }
             return view('carts.checkout', [
-                'profileNav'      => 'cart',
-                'carts'           => $carts,
-                'qty'             => $quantity,
-                'totalPrice'      => $totalPrice,
-                'totalWeight'     => $totalWeight,
-                'provinces'       => $sicepatProvinces,
+                'profileNav'  => 'cart',
+                'carts'       => $carts,
+                'qty'         => $quantity,
+                'totalPrice'  => $totalPrice,
+                'totalWeight' => $totalWeight,
+                'provinces'   => $sicepatProvinces,
             ]);
         } else {
             $carts               = session()->get('guest-cart-checkout');
@@ -297,6 +298,7 @@ class CartController extends Controller
             'total_price'       => 'required',
             'payment_method'    => 'required|string',
             'is_dropship'       => '',
+            'promo_code'        => '',
             // 'delivery_type'     => 'required|string',
         ];
         // if (!\Auth::check()) {
@@ -325,31 +327,50 @@ class CartController extends Controller
             }
         }
         $order = new Order($request->all());
-        $shippingDetails = explode(' | Rp.', $request->shipping_fee);
-        $order->delivery_type = $shippingDetails[0];
-        $order->shipping_fee = (float)$shippingDetails[1];
-        $order->total_fee = $shippingDetails[1] + $request->totalPrice + rand(111,999);
-        $order->user_id = (\Auth::check()) ? \Auth::user()->id : null;
-
+        
         // Get user carts and items to be paid
         if (\Auth::check()) {
             $carts = Cart::where('user_id', '=', \Auth::user()->id)->get();
         } else {
             $carts = session()->get('guest-cart-checkout');
         }
-
-        // Check if wallet balance is enough
+        // Initiate Price Calculation
         $totalPrice = 0;
         if (\Auth::check()) {
             foreach ($carts as $item) {
-                $totalPrice += $item->amount * $item->product()->first()->price;
+                $itemPrice = $item->product()->first()->price;
+                $discountedPrice = $item->product()->first()->discounted_price;
+                $totalPrice += $item->amount * (!empty($discountedPrice) && $discountedPrice > 0 ? $discountedPrice : $itemPrice);
             }
         } else {
             foreach ($carts as $item) {
-                $totalPrice += $item['quantity'] * $item['product']->price;
+                $itemPrice = $item['product']->price;
+                $discountedPrice = $item['product']->discounted_price;
+                $totalPrice += $item['quantity'] * (!empty($discountedPrice) && $discountedPrice > 0 ? $discountedPrice : $itemPrice);
             }
         }
+        $order->total_fee = $totalPrice;
+        // Initiate pice calculation
+        $promotion = PromoCode::where('name', '=', $request->promo_code)
+                ->whereNotNull('published_at')
+                ->first();
+        if (!empty($promotion)) {
+            $discount = floor($request->total_price * $promotion->discount / 100);
+            $discount = ($discount > $promotion->limit) ? $promotion->limit : $discount;
+            $order->total_fee -= $discount;
+            $order->promotion = $promotion->name;
+            $order->discount = $promotion->discount;
+            $order->discount_limit - $promotion->limit;
+            $order->deduction = $discount;
+        }
+        $shippingDetails = explode(' | Rp.', $request->shipping_fee);
+        $order->delivery_type = $shippingDetails[0];
+        $order->shipping_fee = (float)$shippingDetails[1];
+        // Add shipping price and random number 
+        $order->total_fee += $shippingDetails[1] + rand(111,999);
+        $order->user_id = (\Auth::check()) ? \Auth::user()->id : null;
 
+        // Check if wallet balance is enough
         // applied to logged in user only
         if ($order->payment_method == 'wallet') {
             if (\Auth::user()->wallet - $totalPrice < 0) {
@@ -361,7 +382,6 @@ class CartController extends Controller
         // Save order for status mapping
         $district = District::where('code', '=', $request->receiver_district)->first();
         $order->receiver_district = $district->name;
-        $order->total_fee += $totalPrice;
         $dateTime = Carbon::now();
         $order->order_number = 'CLY-' . $dateTime->format('U') . '-' . rand(0,9999);
         $order->latest_status = Order::ORDER_STATUS_AWAITING_PAYMENT;
@@ -399,8 +419,9 @@ class CartController extends Controller
                     'product_variant_id' => $cart->product_variant_id,
                     'size'               => $cart->size,
                     'amount'             => $cart->amount,
-                    'sold_price'         => $cart->product()->first()->price
                 ]);
+                $productAddition = Product::find($cart->product_id);
+                $orderItem->sold_price = (!empty($productAddition->discounted_price) && $productAddition->discounted_price > 0) ? $productAddition->discounted_price : $productAddition->price; 
                 $orderItem->save();
             }
         } else {
@@ -412,6 +433,8 @@ class CartController extends Controller
                     'amount'             => $cart['quantity'],
                     'sold_price'         => $cart['product']->price
                 ]);
+                $productAddition = Product::find($cart['product']->id);
+                $orderItem->sold_price = (!empty($productAddition->discounted_price) && $productAddition->discounted_price > 0) ? $productAddition->discounted_price : $productAddition->price;
                 $orderItem->save();
             }
         }

@@ -41,7 +41,19 @@ Clouwny | Shopping Bag
                                     </a>
                                 </td>
                                 <td>{{ $item->amount }}</td>
-                                <td>Rp {{ number_format($item->product()->first()->price) }},-</td>
+                                <td>
+                                    @if(!empty($item->product()->first()->discounted_price) && $item->product()->first()->discounted_price > 0)
+                                    Rp {{ number_format($item->product()->first()->discounted_price) }},-
+                                    <br>
+                                    <b>
+                                        <small class="red-text"  style="text-decoration: line-through">
+                                            Rp {{ number_format($item->product()->first()->price) }},-
+                                        </small>
+                                    </b>
+                                    @else
+                                    Rp {{ number_format($item->product()->first()->price) }},-
+                                    @endif
+                                </td>
                                 <td><button class="btn-uniform rm-cart-btn" type="submit" data-product="{{ $item->product()->first()->slug }}" data-target=".idx-cart-{{$key}}"><i class="fa fa-icon fa-close" title="remove" alt="remove"></i></button></td>
                             </tr>
                             @endforeach
@@ -56,7 +68,11 @@ Clouwny | Shopping Bag
                                     </a>
                                 </td>
                                 <td>{{ $item['quantity'] }}</td>
+                                @if(!empty($item['product']->discounted_price) && $item['product']->discounted_price > 0)
+                                <td>Rp {{ number_format($item['product']->discounted_price) }},-</td>
+                                @else
                                 <td>Rp {{ number_format($item['product']->price) }},-</td>
+                                @endif
                                 <td><button class="btn-uniform rm-cart-btn" type="submit" data-product="{{ $item['product']->slug }}" data-target=".idx-cart-{{$key}}"><i class="fa fa-icon fa-close" title="remove" alt="remove"></i></button></td>
                             </tr>
                             @endforeach

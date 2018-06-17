@@ -20,6 +20,7 @@
                 <ul class="nav child_menu">
                     <li><a href="{{ route('backend.categories.index') }}">Categories Data</a></li>
                     <li><a href="{{ route('backend.products.index') }}">Product Data</a></li>
+                    <li><a href="{{ route('backend.promo-codes.index') }}">Promotion Data</a></li>
                 </ul>
             </li>
             <li>

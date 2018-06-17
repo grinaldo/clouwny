@@ -25,6 +25,8 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/products', 'ProductController@index')->name('products');
 Route::get('/products/{category}', 'ProductController@indexCategory')->name('products.category');
 Route::get('/products/{category}/{product}', 'ProductController@show')->name('products.detail');
+// Promotions
+Route::post('/promotions/check', 'PromoCodeController@check')->name('promotions.check');
 //  Profile
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
