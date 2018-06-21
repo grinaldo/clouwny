@@ -234,6 +234,7 @@ class OrderController extends ResourceController
 
                             }
                         );
+                        
                         $order->latest_status = Model::ORDER_STATUS_SHIPPED;
                         $order->save();
                         $orderStatus = OrderStatus::firstOrCreate([

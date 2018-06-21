@@ -172,7 +172,6 @@ abstract class ResourceController extends Controller
 
         $this->model = $this->model->newInstance();
         $this->model->fill($this->form->all());
-
         $this->doSave();
 
         session()->flash(NOTIF_SUCCESS, 'New '.$this->getControllerName().' information created.');

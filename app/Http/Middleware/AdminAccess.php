@@ -36,7 +36,8 @@ class AdminAccess
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($request->getRequestUri() !== '/backend/login' &&
+        if (($request->getRequestUri() !== '/backend/login' && 
+             strpos($request->getRequestUri(), '/backend/password') ===false) &&
             ($this->auth->guest() || !$this->auth->user()->isAdmin())
         ) {
             session()->flash(NOTIF_DANGER, 'You don\'t privilege to access that page!');

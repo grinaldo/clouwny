@@ -25,6 +25,8 @@ class CartController extends Controller
     protected $destinationEndpoint;
     protected $tariffEndpoint;
 
+    const DEFAULT_CONFIRMATION_CHANNEL = 'Line';
+
     public function __construct()
     {
         parent::__construct();
@@ -288,17 +290,19 @@ class CartController extends Controller
     public function cartCheckout(Request $request)
     {
         $rules = [
-            'receiver_name'     => 'required|string',
-            'receiver_phone'    => 'required|string',
-            'receiver_email'    => 'required|string|email',
-            'receiver_province' => 'required|string',
-            'receiver_city'     => 'required|string',
-            'receiver_district' => 'required|string',
-            'shipping_fee'      => 'required',
-            'total_price'       => 'required',
-            'payment_method'    => 'required|string',
-            'is_dropship'       => '',
-            'promo_code'        => '',
+            'receiver_name'        => 'required|string',
+            'receiver_phone'       => 'required|string',
+            'receiver_email'       => 'required|string|email',
+            'receiver_province'    => 'required|string',
+            'receiver_city'        => 'required|string',
+            'receiver_district'    => 'required|string',
+            'shipping_fee'         => 'required',
+            'total_price'          => 'required',
+            'payment_method'       => 'required|string',
+            'is_dropship'          => '',
+            'promo_code'           => '',
+            'confirmation_account' => '',
+            'guest_confirmation'   => '',
             // 'delivery_type'     => 'required|string',
         ];
         // if (!\Auth::check()) {
@@ -327,6 +331,7 @@ class CartController extends Controller
             }
         }
         $order = new Order($request->all());
+        $order->confirmation_channel = self::DEFAULT_CONFIRMATION_CHANNEL;
         
         // Get user carts and items to be paid
         if (\Auth::check()) {
@@ -491,9 +496,11 @@ class CartController extends Controller
                 $banksGet[$bank->bank_name.' | '.$bank->account_name ] = '[' . $bank->bank_name.'] '.$bank->account_name . ' | ' . $bank->account_number;
             }
             return view('orders.thanks', [
-                'id'       => $order->id,
-                'totalFee' => $order->total_fee,
-                'banks'    => $banksGet
+                'id'         => $order->id,
+                'promo_code' => $order->promotion,
+                'deduction'  => $order->deduction,
+                'totalFee'   => $order->total_fee,
+                'banks'      => $banksGet
             ]);
         }
         session()->flash(NOTIF_DANGER, 'You have no privilege!');
@@ -633,7 +640,7 @@ class CartController extends Controller
                 $client   = new \GuzzleHttp\Client();
                 $response = $client->request(
                     'GET', 
-                    $this->tariffEndpoint . '?api-key=' . $this->sicepatApikey . '&origin=TGR&destination=' .$code->code . '&weight=' . $request->weight
+                    $this->tariffEndpoint . '?api-key=' . $this->sicepatApikey . '&origin=TGR&destination=' .$code->code . '&weight=' . $request->weight/1000
                 );
                 $result   = json_decode($response->getBody(), true);
                 if (!empty($result['sicepat']['results'])) {

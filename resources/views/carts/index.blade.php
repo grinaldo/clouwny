@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('page-title')
-Clouwny | Shopping Bag
+Clouwny | Belanjaanku
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@ Clouwny | Shopping Bag
     <div class="container container--mid-container">
         <div class="row">
             <div class="col m12 s12">
-                <center><h2>My Account</h2></center>
+                <center><h2>Akun Saya</h2></center>
                 <div class="divider"></div>
             </div>
         </div>
@@ -17,15 +17,15 @@ Clouwny | Shopping Bag
             <div class="row">
                 @include('_includes._profile-navigation')
                 <div id="cart" class="col s12">
-                    <h4 class="grey-text">My Shopping Bag</h4>
+                    <h4 class="grey-text">Belanjaan Saya</h4>
                     <table class="striped">
                         <thead>
                             <tr>
-                                <th>Image</th>
+                                <th>Gambar</th>
                                 <th>Item</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Action</th>
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,12 +33,16 @@ Clouwny | Shopping Bag
                             @if(\Auth::check())
                             @foreach($carts as $key => $item)
                             <tr class="idx-cart-{{$key}}">
-                                <td><img src="{{ !empty($item->image) ? asset($item->image) : asset('images/dummy-2.jpg') }}" width="100" alt=""></td>
+                                <td><img src="{{ !empty($item->product()->first()->image) ? asset($item->product()->first()->image) : asset('images/dummy-2.jpg') }}" width="100" alt=""></td>
                                 <td>
                                     <a class="grey-text" href="{{ url('/products/'.$item->product()->first()->category()->first()->slug.'/'.$item->product()->first()->slug) }}">
                                         {{ $item->product()->first()->name }}
                                         - <i class="fa fa-icon fa-search"></i>
                                     </a>
+                                    <br>
+                                    @if(!empty($item->productVariant()->first()))
+                                    <span class="blue-text">{{ $item->productVariant()->first()->name }}</span>
+                                    @endif
                                 </td>
                                 <td>{{ $item->amount }}</td>
                                 <td>

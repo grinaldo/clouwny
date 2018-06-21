@@ -16,6 +16,11 @@
 // });
 
 Auth::routes();
+
+Route::get('/cache/flush', function() {
+    \Cache::flush();
+});
+
 Route::get('/test', function() {
     return view('emails.ordercreate');
 });

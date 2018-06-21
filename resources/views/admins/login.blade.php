@@ -20,8 +20,9 @@
                 <div>
                     <button type="submit" class="btn btn-default submit" href="index.html"> Log in
                     </button>
-                    {{-- <a class="reset_pass" href="#">Lost your password?</a> --}}
                 </div>
+                <br>
+                <a href="{{ url('backend/password/reset') }}">Forgot Password</a>
 
                 <div class="clearfix"></div>
 

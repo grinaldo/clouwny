@@ -46,4 +46,9 @@ class Cart extends BaseModel
         return $this->belongsTo('App\Model\Product');
     }
 
+    public function productVariant()
+    {
+        return $this->belongsTo('App\Model\ProductVariant');
+    }
+
 }

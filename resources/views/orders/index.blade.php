@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('page-title')
-Clouwny | My Order
+Clouwny | Pesanan Saya
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@ Clouwny | My Order
     <div class="container container--mid-container">
         <div class="row">
             <div class="col m12 s12">
-                <center><h2>My Account</h2></center>
+                <center><h2>Akun Saya</h2></center>
                 <div class="divider"></div>
             </div>
         </div>
@@ -17,14 +17,15 @@ Clouwny | My Order
             <div class="row">
                 @include('_includes._profile-navigation')
                 <div id="order" class="col s12">
-                    <h4 class="grey-text">My Order</h4>
+                    <h4 class="grey-text">Pesanan Saya</h4>
                     <table class="striped">
                         <thead>
                             <tr>
-                                <th>Order No.</th>
+                                <th>Nomor Pesanan</th>
                                 <th>Status</th>
-                                <th>Order Date</th>
-                                <th>Action</th>
+                                <th>Total Bayar</th>
+                                <th>Tanggal Pesanan</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,6 +34,17 @@ Clouwny | My Order
                             <tr>
                                 <td>{{ $order->id }}</td>
                                 <td>{{ $order->latest_status }}</td>
+                                <td>
+                                    Rp {{ number_format($order->total_fee) }},-
+                                    <br>
+                                    @if($order->promotion)
+                                    <small>
+                                        <span class="green-text"><b>kode promo: </b> {{ $order->promotion }}</span>
+                                        <br>
+                                        <span class="blue-text"><b>potongan: </b> {{ $order->deduction }}</span>
+                                    </small>
+                                    @endif
+                                </td>
                                 <td>{{ $order->created_at }}</td>
                                 <td>
                                     <a href="{{ url('/orders/'.$order->id.'/detail') }}" class="btn-uniform" type="submit"><i class="fa fa-icon fa-search" title="detail"></i></a>

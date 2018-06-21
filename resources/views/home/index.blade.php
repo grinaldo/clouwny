@@ -46,7 +46,7 @@ Clouwny | Home Page
     <div class="row category-container">
         @foreach($categories as $key => $category)
         <a href="{{ url('products/'.$category->slug) }}">
-            <div class="col s{{ceil(12/count($categories))}}" style="background: url('{{ empty($categories->image) ? asset('images/category-'.($key+1).'.jpg') : asset($category->image)}}');">
+            <div class="col s{{ceil(12/count($categories))}}" style="background: url('{{ empty($category->image) ? asset('images/category-'.($key+1).'.jpg') : asset($category->image)}}');">
                 <div class="category-container__description">{{ $category->name }}</div>
             </div>
         </a>
@@ -71,7 +71,7 @@ Clouwny | Home Page
         <div class="col s12">
             <p>
                 <center>
-                    <a href="" class="btn-uniform">All Collections</a>
+                    <a href="{{ route('products') }}" class="btn-uniform">Semua Koleksi</a>
                 </center>
             </p>
         </div>
@@ -162,7 +162,7 @@ Clouwny | Home Page
     <div class="row about-container">
         <div class="col s4 about-container__heading">
             <a href="{{ route('products') }}" class="button-box button-bar">
-                Check our collection
+                Koleksi Kami
                 <i class="fa fa-icon fa-arrow-right"></i>
             </a>
             {!! $static->title !!}

@@ -35,6 +35,9 @@ var FormField = function() {
             templates: urlPrefix + "backend/template/list",
             image_dimensions: false,
             relative_urls: false,
+            allow_html_in_named_anchor: true,
+            entity_encoding : "raw",
+            entities : '160,nbsp,162,cent,8364,euro,163,pound'
         });
     }
 

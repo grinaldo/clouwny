@@ -55,6 +55,8 @@
                                 <div class="x_panel">
                                     <div class="x_title">
                                         <h2>Data Table</h2>
+                                        <div class="x_content bs-example-popovers">
+                                        @include('admins._includes._notification')
                                         {{-- <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                             </li>

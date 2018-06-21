@@ -110,8 +110,13 @@ $(document).ready(function(){
     $('.carousel').carousel({
         fullWidth: true,
         indicators: true,
-        duration: 1
+        duration: 200
     });
+    autoplay();
+    function autoplay() {
+        $('.carousel').carousel('next');
+        setTimeout(autoplay, 2000);
+    }
 });
 </script>
 @endsection

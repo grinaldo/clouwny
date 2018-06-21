@@ -17,16 +17,7 @@ Site Name | Checkout
             <div class="col m6 s12">
                 <form class="form-horizontal" role="form" method="POST" action="{{ route('checkout.order') }}">
                     {!! Form::hidden('total_price', $totalPrice) !!}
-                    <h5 class="grey-text">Payment</h5>
-                    <div class="row">
-                        <div class="col s12">
-                            <ul class="tabs">
-                                <li class="tab col s6"><a class="active" href="#delivery">Pengiriman</a></li>
-                                <li class="tab col s6"><a href="#dropship">Dropship</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <br>
+                    <h5 class="grey-text">Pembayaran</h5>
                     <div class="row">
                         <div id="delivery" class="col s12">
                             {{ csrf_field() }}
@@ -118,7 +109,7 @@ Site Name | Checkout
                             <div class="row">
                                 <div class="input-field col s12">
                                     <label for="address">
-                                        Address
+                                        Alamat Lengkap
                                         <span class="red-text">*</span>
                                     </label>
                                     <textarea id="address" class="form-site-input materialize-textarea" name="receiver_address">{{ !empty(old('receiver_address')) ? old('receiver_address') : ((Auth::check()) ? Auth::user()->address : '') }}</textarea>
@@ -126,19 +117,12 @@ Site Name | Checkout
                             </div>
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <label for="promo_code" class="active">
-                                        Promo Code
-                                    </label>
-                                    <input placeholder="Promo Code" id="promo_code" type="text" class="validate form-site-input" name="promo_code" value="{{ !empty(old('promo_code')) ? old('promo_code') : '' }}">
-                                    <div>
-                                        <b>
-                                            <small id="promo-info" class="promo-info blue-text"></small>
-                                        </b>
-                                    </div>
+                                    <label for="confirmation_account" class="active">
+                                        Line id
+                                    </label>   
+                                    <input placeholder="line id" id="confirmation_account" type="text" class="validate form-site-input" name="{{ (Auth::check() ? 'confirmation_account' : 'guest_confirmation') }}" value="">
                                 </div>
                             </div>
-                        </div>
-                        <div  id="dropship" class="col s12">
                             <div class="row">
                                 <div class="col s12">
                                     <p>
@@ -149,12 +133,25 @@ Site Name | Checkout
                             </div>
                             <div class="row">
                                 <div class="input-field col m6 s6">
-                                    <label for="shipper_name" class="active">Dropshipper Name</label>   
+                                    <label for="shipper_name" class="active">Pengirim</label>   
                                     <input placeholder="Dropshipper Name" id="shipper_name" type="text" class="validate form-site-input" name="shipper_name" value="{{ old('shipper_name') }}">
                                 </div>
                                 <div class="input-field col m6 s6">
-                                    <label for="shipper_phone" class="active">Dropshipper Phone</label>   
+                                    <label for="shipper_phone" class="active">Telp. Pengirim</label>   
                                     <input placeholder="Dropshipper Phone" id="shipper_phone" type="text" class="validate form-site-input" name="shipper_phone" value="{{ old('shipper_phone') }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <label for="promo_code" class="active">
+                                        Kode Promo
+                                    </label>
+                                    <input placeholder="Kode Promo" id="promo_code" type="text" class="validate form-site-input" name="promo_code" value="{{ !empty(old('promo_code')) ? old('promo_code') : '' }}">
+                                    <div>
+                                        <b>
+                                            <small id="promo-info" class="promo-info blue-text"></small>
+                                        </b>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +180,7 @@ Site Name | Checkout
                         @if(Auth::check())
                         @foreach($carts as $key=> $item)
                         <tr class="idx-cart-{{$key}}">
-                            <td><img src="{{ !empty($item->image) ? asset($item->image) : asset('images/dummy-2.jpg') }}" width="50" alt=""></td>
+                            <td><img src="{{ !empty($item->product()->first()->image) ? asset($item->product()->first()->image) : asset('images/dummy-2.jpg') }}" width="50" alt=""></td>
                             <td>{{ $item->product()->first()->name }}</td>
                             <td class="right-align">{{ $item->amount }}</td>
                             <td class="right-align">{{ number_format($item->product()->first()->weight) }}</td>

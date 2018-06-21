@@ -64,10 +64,10 @@ $menu-color: #3e4046;
 .brand-logo {
     img {
         @include add-transition(.5s);
-        width:60px;
+        width:40px;
         z-index:100;
         @media only screen and (min-width: 40.063em) {
-            width: 120px;
+            width: 90px;
         }
     }
     .img-sm {

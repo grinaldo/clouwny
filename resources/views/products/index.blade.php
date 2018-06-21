@@ -23,7 +23,7 @@ Clouwny | All Collection
                 <p>Here in <b>Clouwny</b> we provide the high quality women wears with interesting price for you fashion lovers. We have wide range of collections from dressing, accessories, and so on to fulfill your fashion needs. </p>
                 @else
                 <h3>{{ $categorySelected->name }}</h3>
-                <p>{{ $categorySelected->description }}</p>
+                <p>{!! $categorySelected->description !!}</p>
                 @endif
             </div>
             <div class="col s12 m3 nav-wrapper">
@@ -57,7 +57,7 @@ Clouwny | All Collection
                         <li><a href="/"><i class="fa fa-icon fa-home inline-icon--1x"></i>Home</a></li>
                         <li><a href="{{ route('products') }}">Clouwny Collections</a></li>
                         @if(!empty($categorySelected))
-                        <li><a href="{{ url('/products/'.$category->slug) }}">{{ $category->name }}</a></li>
+                        <li><a href="{{ url('/products/'. $categorySelected->slug) }}">{{ $categorySelected->name }}</a></li>
                         @endif
                     </ul>
                 </div>
