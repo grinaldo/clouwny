@@ -3,6 +3,7 @@
     <head>
         @include('_includes._head-meta')
         @include('_includes._head-style')
+        @yield('page-style')
         @include('_includes._head-script')
     </head>
     <body>

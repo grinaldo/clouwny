@@ -18,6 +18,7 @@ class PageController extends ResourceController
     protected $rules = [
         'slug' => 'alpha_dash|unique:pages,slug',
         'url_prefix' => 'sometimes|nullable|string',
+        'image' => 'sometimes|nullable|string',
         'layout' => 'sometimes|nullable|string',
         'name' => 'required|string|unique:pages,name',
         'title' => 'required|string',

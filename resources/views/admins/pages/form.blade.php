@@ -25,6 +25,7 @@
     {!! Form::backendText('slug', 'Slug') !!}
     {{-- {!! Form::backendText('url_prefix', 'URL') !!} --}}
     {{-- {!! Form::backendText('layout', 'Layout') !!} --}}
+    {!! Form::backendFileBrowser('image', "Select Image")!!}
     {!! Form::backendText('name', 'Name') !!}
     {!! Form::backendWysiwyg('title', 'Title') !!}
     {!! Form::backendText('short_title', 'Short Title') !!}

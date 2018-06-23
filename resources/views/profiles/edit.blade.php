@@ -4,6 +4,10 @@
 Clouwny | Edit Profile
 @endsection
 
+@section('page-style')
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.standalone.min.css">
+@endsection
+
 @section('content')
 <section class="section pad-vertical-hero">
     <div class="container container--mid-container">
@@ -35,7 +39,7 @@ Clouwny | Edit Profile
                                     <label for="name" class="active">Name</label>
                                 </div>
                                 <div class="input-field col s12">
-                                    {!! Form::date('birthday', $model->birthday, ['class' => 'datepicker form-site-input']) !!}
+                                    {!! Form::text('birthday', $model->birthday, ['class' => 'datepicker form-site-input']) !!}
                                     <label for="birthday" class="active">Date of Birth</label>
                                 </div>
 
@@ -47,6 +51,10 @@ Clouwny | Edit Profile
                                 <div class="input-field col s12">
                                     {!! Form::text('phone', $model->phone, ['class' => 'form-site-input']) !!}
                                     <label for="phone" class="active">Phone Number</label>
+                                </div>
+                                <div class="input-field col s12">
+                                    {!! Form::text('confirmation_account', $model->confirmation_account) !!}
+                                    <label for="confirmation_account" class="active">Akun Konfirmasi</label>
                                 </div>
                                 <h5>Password</h5>
                                 <small>*input characters and numbers with minimum length of 8</small>
@@ -62,16 +70,16 @@ Clouwny | Edit Profile
                             <div class="col s6">
                                 <h5>Address</h5>
                                 <div class="input-field col s12">
-                                    {!! Form::text('Province', $model->province, ['class' => 'form-site-input']) !!}
-                                    <label for="province" class="active">Province</label>
+                                    <label for="province" class="active">Provinsi</label>
+                                    {!! Form::select('province', $provinces) !!}
                                 </div>
                                 <div class="input-field col s12">
-                                    {!! Form::text('city', $model->city, ['class' => 'form-site-input']) !!}
-                                    <label for="city" class="active">City</label>
+                                    <label for="city" class="active">Kota</label>
+                                    {!! Form::select('city', $cities) !!}
                                 </div>
                                 <div class="input-field col s12">
-                                    {!! Form::text('district', $model->district, ['class' => 'form-site-input']) !!}
-                                    <label for="district" class="active">District</label>
+                                    <label for="district" class="active">Kecamatan</label>
+                                    {!! Form::select('district', $districts) !!}
                                 </div>
                                 <div class="input-field col s12">
                                     {!! Form::text('zipcode', $model->zipcode, ['class' => 'form-site-input']) !!}
@@ -94,15 +102,8 @@ Clouwny | Edit Profile
 @endsection
 
 @section('page-script')
-<script>    
-$('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 60, // Creates a dropdown of 15 years to control year,
-    max: new Date(),
-    today: 'Today',
-    clear: 'Clear',
-    close: 'Ok',
-    closeOnSelect: false // Close upon selecting a date,
-});
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+$('.datepicker').datepicker();
 </script>
 @endsection

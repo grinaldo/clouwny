@@ -27,6 +27,7 @@
     {!! Form::backendText('wallet', 'Wallet') !!}
     {!! Form::backendText('username', 'Username') !!}
     {!! Form::backendEmail('email', 'Email') !!}
+    {!! Form::backendText('confirmation_account', 'Confirmation Account') !!}
     {!! Form::backendPassword('password', 'Password') !!}
     {!! Form::backendPassword('password_confirmation', 'Password Confirmation') !!}
 

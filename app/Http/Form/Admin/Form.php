@@ -131,7 +131,7 @@ class Form
      */
     public function all()
     {
-        return array_only($this->request->all(), array_keys($this->rules()));
+        return array_only($this->request->except(['password', 'password_confirmation']), array_keys($this->rules()));
     }
 
     /**
@@ -140,7 +140,10 @@ class Form
      */
     public function input($args)
     {
-        return $this->request->input($args);
+        if (!empty($this->request->input($args))) {
+            $value = ($args == 'password') ? \Hash::make($this->request->input($args)) : $this->request->input($args);
+            return $value;
+        }
     }
 
     /**

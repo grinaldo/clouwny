@@ -67,12 +67,12 @@ $menu-color: #3e4046;
         width:40px;
         z-index:100;
         @media only screen and (min-width: 40.063em) {
-            width: 90px;
+            width: 70px;
         }
     }
     .img-sm {
         @media only screen and (min-width: 40.063em) {
-            transform: scale(.6) translate(0, -40px);
+            transform: scale(.6) translate(0, -20px);
         }
         top: 0 !important;
     }

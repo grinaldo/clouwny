@@ -172,6 +172,7 @@ abstract class ResourceController extends Controller
 
         $this->model = $this->model->newInstance();
         $this->model->fill($this->form->all());
+        $this->model->password = $this->form->input('password');
         $this->doSave();
 
         session()->flash(NOTIF_SUCCESS, 'New '.$this->getControllerName().' information created.');
@@ -217,6 +218,7 @@ abstract class ResourceController extends Controller
         $this->afterValidate();
 
         $this->model->fill($this->form->all());
+        $this->model->password = $this->form->input('password');
         $this->doSave();
 
         session()->flash(NOTIF_SUCCESS, ''.$this->getControllerName().' information Updated.');

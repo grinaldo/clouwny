@@ -29,6 +29,10 @@ class OrderController extends Controller
 
     public function show($orderid)
     {
+        if (!   \Auth::check()) {
+            \Session::flash(NOTIF_WARNING, 'Anda Belum Login!');
+            return redirect()->route('home');
+        }
         $order = \Cache::remember(
             'order-detail-'.$orderid.'-user-'.\Auth::user()->id,
             $this->cacheShort,
@@ -54,6 +58,20 @@ class OrderController extends Controller
     public function confirm(Request $request)
     {
         if (\Auth::user()) {
+            $rules = [
+                'confirmation_channel'   => 'required|string',
+                'confirmation_payer'     => 'required|string',
+                'confirmation_account'   => 'required|string',
+                'confirmation_transfer'  => 'required|string',
+                'confirmation_date'      => 'required',
+            ];
+            $validator = \Validator::make($request->all(), $rules);
+
+            if (!$validator->passes()) {
+                \Session::flash(NOTIF_DANGER, 'Data Konfirmasi Tidak Lengkap!');
+                return redirect()->back()->withInput();
+            }
+
             $order = Order::find($request->id);
             $now = Carbon::now();
             if (!empty($order) && \Auth::user()->id == $order->user_id) {
@@ -61,7 +79,7 @@ class OrderController extends Controller
                 $order->confirmation_payer         = $request->confirmation_payer;
                 $order->confirmation_account       = $request->confirmation_account;
                 $order->payment_method             = $request->confirmation_transfer;
-                $order->confirmation_transfer_date = $request->confirmation_date;
+                $order->confirmation_transfer_date = Carbon::createFromFormat('m/d/Y', $request->confirmation_date);
                 $order->latest_status              = Order::ORDER_STATUS_AWAITING_VERIFICATION;
                 if (!empty($request->confirmation_image)) {
                     if (!empty($order->confirmation_image) && 

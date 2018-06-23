@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('district')->nullable();
             $table->string('address')->nullable();
             $table->string('zipcode')->nullable();
+            $table->string('confirmation_account')->nullable();
 
             $table->boolean('active')->default(true);
             $table->rememberToken();

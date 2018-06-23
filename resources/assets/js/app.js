@@ -8,7 +8,7 @@
 require('./bootstrap');
 require('./materialize');
 require('./init');
-require('./slick')
+require('./slick');
 
 window.Vue = require('vue');
 

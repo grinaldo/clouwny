@@ -46,7 +46,8 @@ class User extends BaseModel implements
         'district',
         'zipcode',
         'address',
-        'wallet'
+        'wallet',
+        'confirmation_account',
     ];
 
     protected $urlKey = 'id';

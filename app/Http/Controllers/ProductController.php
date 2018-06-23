@@ -57,7 +57,7 @@ class ProductController extends Controller
         $variants   = ['-' => '-'];
         $stock      = 0;
         foreach ($productGet->variants()->get() as $variant) {
-            $variants[$variant->id] = $variant->name;
+            $variants[$variant->id] = $variant->name . " (Stok: $variant->stock)";
             $stock += $variant->stock;
         }
         return view('products.show', [

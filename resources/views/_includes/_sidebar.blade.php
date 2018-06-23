@@ -12,10 +12,10 @@
     <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
             <li>
-                <a class="collapsible-header">Collection<i class="material-icons">arrow_drop_down</i></a>
+                <a class="collapsible-header">Koleksi<i class="material-icons">arrow_drop_down</i></a>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="{{ url('products') }}">All Collections</a></li>
+                        <li><a href="{{ url('products') }}">Semua Koleksi</a></li>
                         @if(!empty($allCategories) && count($allCategories))
                         @foreach($allCategories as $category)
                         <li><a href="{{ url('products/'.$category->slug) }}">{{ $category->name }}</a></li>
@@ -31,15 +31,15 @@
     <li><a class="subheader">Welcome, {{ Auth::user()->username }}</a></li>
     @else
     <li><a href="{{ url('login') }}" class="waves-effect"><i class="fa fa-icon fa-sign-in"></i>Login</a></li>
-    <li><a href="{{ url('register') }}" class="waves-effect"><i class="fa fa-icon fa-pencil"></i>Register</a></li>
+    <li><a href="{{ url('register') }}" class="waves-effect"><i class="fa fa-icon fa-pencil"></i>Daftar</a></li>
     @endif
-    <li><a href="{{ route('home') }}" class="waves-effect"><i class="fa fa-icon fa-home"></i>Home</a></li>
+    <li><a href="{{ route('home') }}" class="waves-effect"><i class="fa fa-icon fa-home"></i>Beranda</a></li>
     @if(!Auth::guest())
-    <li><a href ="{{ route('cart') }}" class="waves-effect"><i class="fa fa-icon fa-shopping-bag"></i>My Bag</a></li>
-    <li><a href="{{ route('profile') }}" class="waves-effect"><i class="fa fa-icon fa-user"></i>Profile</a></li>
+    <li><a href ="{{ route('cart') }}" class="waves-effect"><i class="fa fa-icon fa-shopping-bag"></i>Belanjaanku</a></li>
+    <li><a href="{{ route('profile') }}" class="waves-effect"><i class="fa fa-icon fa-user"></i>Profil</a></li>
     @endif
-    <li><a href ="{{ route('wishlists') }}" class="waves-effect"><i class="fa fa-icon fa-heart"></i>Wishlist</a></li>
-    <li><a href ="{{ route('orders') }}" class="waves-effect"><i class="fa fa-icon fa-sticky-note"></i>Order</a>
+    <li><a href ="{{ route('wishlists') }}" class="waves-effect"><i class="fa fa-icon fa-heart"></i>Favorit</a></li>
+    <li><a href ="{{ route('orders') }}" class="waves-effect"><i class="fa fa-icon fa-sticky-note"></i>Pesananku</a>
     </li>
     @if(Auth::check())
     <li>

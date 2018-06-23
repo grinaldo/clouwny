@@ -42,21 +42,14 @@ Clouwny | My Profile
 
                             <h5>General Info</h5>
                             <dl class="profile-table">
-                                <dt>Username: </dt>
-                                <dd>{{ Auth::user()->username }}</dd>
-                            </dl>
-                            <dl class="profile-table">
-                                <dt>Name: </dt>
+                                <dt>Nama: </dt>
                                 <dd>{{ Auth::user()->name }}</dd>
                             </dl>
                             <dl class="profile-table">
-                                <dt>Date of Birth: </dt>
+                                <dt>Tanggal Lahir: </dt>
                                 <dd>{{ Auth::user()->birthday }}</dd>
                             </dl>
-                            <dl class="profile-table">
-                                <dt>Gender: </dt>
-                                <dd>{{ Auth::user()->gender }}</dd>
-                            </dl>
+                            
 
                             <h5>Contact</h5>
                             <dl class="profile-table">
@@ -67,10 +60,27 @@ Clouwny | My Profile
                                 <dt>Phone: </dt>
                                 <dd>{{ Auth::user()->phone }}</dd>
                             </dl>
-
-                            <h5>Password</h5>
                             <dl class="profile-table">
-                                <dt>Password: </dt>
+                                <dt>Akun Konfirmasi: </dt>
+                                <dd>{{ Auth::user()->confirmation_account }}</dd>
+                            </dl>
+
+                            <h5>Alamat</h5>
+                            <dl class="profile-table">
+                                <dt>Provinsi: </dt>
+                                <dd>{{ Auth::user()->province }}</dd>
+                            </dl>
+                            <dl class="profile-table">
+                                <dt>Kota: </dt>
+                                <dd>{{ Auth::user()->city }}</dd>
+                            </dl>
+                            <dl class="profile-table">
+                                <dt>Kecamatan: </dt>
+                                <dd>{{ Auth::user()->district }}</dd>
+                            </dl>
+                            <dl class="profile-table">
+                                <dt>Kode Pos: </dt>
+                                <dd>{{ Auth::user()->zipcode }}</dd>
                             </dl>
                         </div>
                     </div>

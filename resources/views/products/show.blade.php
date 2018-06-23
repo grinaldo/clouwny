@@ -25,24 +25,38 @@ Clouwny | Product - {{ $product->name }}
                         'method' => 'POST'
                     ])
                 !!}
+                    @if($product->stock !== 0)
+                    <div class="row">
+                        <div class="col s12">
+                            @if(!empty($product->discounted_price) && $product->discounted_price > 0)
+                            <b>
+                                <small class="red-text" style="text-decoration: line-through">Harga: Rp {{ number_format($product->price) }}</small>
+                            </b>
+                            <br>
+                            <b>Harga: Rp {{ number_format($product->discounted_price) }}</b>
+                            @else
+                            <b>Harga: Rp {{ number_format($product->price) }}</b>
+                            @endif
+                        </div>
+                    </div>
+                    <br>
                     <div class="input-field">
                         {!! Form::select('variant', $variants) !!}
                         <label for="variant">Variant</label>
                     </div>
-                    @if($product->stock !== 0)
                     <div class="row">
-                        <div class="col s6">
+                        <div class="col s12">
                             <div class="input-field">
-                                <input placeholder="Quantity" id="quantity" type="text" class="validate" style="border-bottom: 1px solid #aaa" name="quantity">
+                                <input placeholder="Quantity" id="quantity" type="text" class="validate" style="border-bottom: 1px solid #aaa" name="quantity" value="1">
                                 <label for="quantity">Quantity</label>
                             </div>
                         </div>
-                        <div class="col s6">
+                        {{-- <div class="col s6">
                             <div class="input-field">
                                 {!! Form::select('size', ['S' => 'S', 'M' => 'M', 'L' => 'L', 'XL' => 'XL']) !!}
                                 <label for="size">Size</label>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     @endif
                     @if($product->stock == 0)
@@ -82,20 +96,11 @@ Clouwny | Product - {{ $product->name }}
             <div class="col s12 m3 product-detail__right">
                 <div class="divider"></div>
                 <h5>Details</h5>
-                <p class="product-detail__addinfo">
-                    @if(!empty($product->discounted_price) && $product->discounted_price > 0)
-                    <b>
-                        <small class="red-text" style="text-decoration: line-through">Price: Rp {{ number_format($product->price) }}</small>
-                    </b>
-                    <br>
-                    <b>Price: Rp {{ number_format($product->discounted_price) }}</b>
-                    @else
-                    <b>Price: Rp {{ number_format($product->price) }}</b>
-                    @endif
+                {{-- <p class="product-detail__addinfo">
                     <br>
                     <b>Stock: {{ number_format($product->stock) }}</b>
                 </p>
-                <div class="divider"></div>
+                <div class="divider"></div> --}}
                 {!! $product->description !!}
             </div>
         </div>
@@ -115,7 +120,7 @@ $(document).ready(function(){
     autoplay();
     function autoplay() {
         $('.carousel').carousel('next');
-        setTimeout(autoplay, 2000);
+        setTimeout(autoplay, 3000);
     }
 });
 </script>

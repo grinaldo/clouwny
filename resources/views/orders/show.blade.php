@@ -4,6 +4,10 @@
 Clouwny | Detil Order
 @endsection
 
+@section('page-style')
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.standalone.min.css">
+@endsection
+
 @section('content')
 <section class="section pad-vertical-hero">
     <div class="container container--mid-container">
@@ -130,7 +134,7 @@ Clouwny | Detil Order
                             <div class="row">
                                 <div class="col s12">
                                     <div class="input-field">
-                                        {!! Form::select('confirmation_transfer', $banks) !!}
+                                        {!! Form::select('confirmation_transfer', $banks, $order->payment_method) !!}
                                         <label for="Transfer Via">Metode Pembayaran</label>
                                     </div>
                                     <div class="input-field">
@@ -138,7 +142,7 @@ Clouwny | Detil Order
                                         <input placeholder="Nama pengirim (jika transfer bank)" id="confirmation_payer" type="text" class="validate form-site-input" name="confirmation_payer" value="{{ $order->confirmation_payer }}">
                                     <div class="input-field">
                                         <label for="confirmation_date" class="active">Tanggal Pembayaran</label>   
-                                        <input placeholder="Your Account e.g: @my_line" id="confirmation_date" type="date" class="validate form-site-input" name="confirmation_date" value="{{ $order->confirmation_date }}">
+                                        <input placeholder="Tanggal Pembayaran" id="confirmation_date" type="text" class="validate form-site-input datepicker" name="confirmation_date" value="{{ $order->confirmation_date }}">
                                     </div>
                                     </div>
                                     <div class="input-field">
@@ -160,10 +164,11 @@ Clouwny | Detil Order
                                                 <input class="file-path validate" type="text" name="">
                                             </div>
                                         </div>
-                                        <small>Unggah bukti transfer Anda <span class="red-text">*</span></small>
                                         @if(!empty($order->confirmation_image))
                                         <img style="width:50%" src="{{ asset($order->confirmation_image) }}" alt="">
                                         @endif
+                                        <br>
+                                        <small>Unggah bukti transfer Anda <span class="red-text">*</span></small>
                                     </div>
 
                                     <div class="input-field">
@@ -188,7 +193,13 @@ Clouwny | Detil Order
                     @foreach($order->orderItems()->get() as $orderItem)
                         <tr>
                             <td><img width="100" src="{{ asset($orderItem->product()->first()->image) }}" alt=""></td>
-                            <td>{{ $orderItem->product()->first()->name }}</td>
+                            <td>
+                                {{ $orderItem->product()->first()->name }}
+                                <br>
+                                @if(!empty($orderItem->productVariant()->first()))
+                                <span class="blue-text">{{ $orderItem->productVariant()->first()->name }}</span>
+                                @endif
+                            </td>
                             <td>Rp. {{ number_format($orderItem->sold_price) }},-</td>
                         </tr>
                     @endforeach
@@ -200,4 +211,8 @@ Clouwny | Detil Order
 @endsection
 
 @section('page-script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+$('.datepicker').datepicker();
+</script>
 @endsection
