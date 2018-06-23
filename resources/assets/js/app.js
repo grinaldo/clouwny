@@ -186,36 +186,36 @@ function donePromoInputTyping() {
     }
 }
 
-var initProvinceSelect = function() {
-    if ($('#receiver_province').length) {
-        $('#receiver_province').change(function() {
+var initProvinceSelect = function initProvinceSelect(provinceContainer, cityContainer, districtContainer) {
+    if ($(provinceContainer).length) {
+        $(provinceContainer).change(function () {
             var csrf = $('meta[name=csrf-token]').attr("content");
             var province = $(this).val();
-            $('#receiver_city').parent().remove();
+            $(cityContainer).parent().remove();
             $.ajax({
                 /* the route pointing to the post function */
                 url: '/cart/get-city',
                 type: 'POST',
                 /* send the csrf-token and the input to the controller */
-                data: {_token: csrf, province: province},
+                data: { _token: csrf, province: province },
                 dataType: 'JSON',
                 /* remind that 'data' is the response of the AjaxController */
                 success: function success(data) {
                     if (data.type == 'success') {
-                        var select = '<select id="receiver_city" name="receiver_city">';
+                        var select = '<select id="' + cityContainer.substr(1) + '" name="' + cityContainer.substr(1) + '">';
                         $.each(data.data, function (key, value) {
                             select += '<option value="' + value.name + '">' + value.name + '</option>';
                         });
                         select += '</select>';
                         $(select).insertAfter('#receiver_city_label');
-                        $('#receiver_city').material_select();
+                        $(cityContainer).material_select();
                         // clean and reinit district
-                        $('#receiver_district').find('option').remove();
-                        $('#receiver_district').material_select();
+                        $(districtContainer).find('option').remove();
+                        $(districtContainer).material_select();
                         // clean and reinit shipping fee
                         $('#shipping_fee').find('option').remove();
                         $('#shipping_fee').material_select();
-                        initCitySelect();
+                        initCitySelect(cityContainer, districtContainer);
                     }
                 },
                 error: function error(data) {
@@ -226,36 +226,36 @@ var initProvinceSelect = function() {
             });
         });
     }
-}
+};
 
-var initCitySelect = function () {
-    if ($('#receiver_city').length) {
-        $('#receiver_city').change(function() {
+var initCitySelect = function initCitySelect(cityContainer, districtContainer) {
+    if ($(cityContainer).length) {
+        $(cityContainer).change(function () {
             var csrf = $('meta[name=csrf-token]').attr("content");
             var city = $(this).val();
-            $('#receiver_district').parent().remove();
+            $(districtContainer).parent().remove();
             $.ajax({
                 /* the route pointing to the post function */
                 url: '/cart/get-district',
                 type: 'POST',
                 /* send the csrf-token and the input to the controller */
-                data: {_token: csrf, city: city},
+                data: { _token: csrf, city: city },
                 dataType: 'JSON',
                 /* remind that 'data' is the response of the AjaxController */
                 success: function success(data) {
                     if (data.type == 'success') {
-                        var select = '<select id="receiver_district" name="receiver_district">';
+                        var select = '<select id="' + districtContainer.substr(1) + '" name="' + districtContainer.substr(1) + '">';
                         $.each(data.data, function (key, value) {
                             select += '<option value="' + value.code + '">' + value.name + '</option>';
                         });
                         select += '</select>';
                         $(select).insertAfter('#receiver_district_label');
                         // reinit district
-                        $('#receiver_district').material_select();
+                        $(districtContainer).material_select();
                         // clean and reinit shipping fee
                         $('#shipping_fee').find('option').remove();
                         $('#shipping_fee').material_select();
-                        initGetTariff();
+                        initGetTariff(districtContainer);
                         initGetTariffShipper();
                     }
                 },
@@ -267,14 +267,14 @@ var initCitySelect = function () {
             });
         });
     }
-}
+};
 
-var initGetTariff = function () {
-    if ($('#receiver_district').length) {
-        $('#receiver_district').change(function() {
-            var csrf     = $('meta[name=csrf-token]').attr("content");
-            var code     = $(this).val();
-            var weight   = $('#totalweight').data('weight');
+var initGetTariff = function initGetTariff(districtContainer) {
+    if ($(districtContainer).length) {
+        $(districtContainer).change(function () {
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            var code = $(this).val();
+            var weight = $('#totalweight').data('weight');
             var delivery = $('#delivery_company').val();
             $('#shipping_fee').parent().remove();
             $.ajax({
@@ -282,7 +282,7 @@ var initGetTariff = function () {
                 url: '/cart/get-tariff',
                 type: 'POST',
                 /* send the csrf-token and the input to the controller */
-                data: {_token: csrf, code: code, weight: weight, delivery: delivery},
+                data: { _token: csrf, code: code, weight: weight, delivery: delivery },
                 dataType: 'JSON',
                 /* remind that 'data' is the response of the AjaxController */
                 success: function success(data) {
@@ -304,7 +304,44 @@ var initGetTariff = function () {
             });
         });
     }
-}
+};
+
+var initGetTariffShipper = function initGetTariffShipper() {
+    if ($('#delivery_company').length) {
+        $('#delivery_company').change(function () {
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            var code = $(districtContainer).val();
+            var weight = $('#totalweight').data('weight');
+            var delivery = $(this).val();
+            $('#shipping_fee').parent().remove();
+            $.ajax({
+                /* the route pointing to the post function */
+                url: '/cart/get-tariff',
+                type: 'POST',
+                /* send the csrf-token and the input to the controller */
+                data: { _token: csrf, code: code, weight: weight, delivery: delivery },
+                dataType: 'JSON',
+                /* remind that 'data' is the response of the AjaxController */
+                success: function success(data) {
+                    if (data.type == 'success') {
+                        var select = '<select id="shipping_fee" name="shipping_fee">';
+                        $.each(data.data, function (key, value) {
+                            select += '<option value="' + value + '">' + value + '</option>';
+                        });
+                        select += '</select>';
+                        $(select).insertAfter('#shipping_fee_label');
+                        $('#shipping_fee').material_select();
+                    }
+                },
+                error: function error(data) {
+                    if (!$('.alert-box').length) {
+                        $('<div class=\"alert-box\"><div class="alert alert-danger">' + data.message + '<span class="close" onclick="$(this).parent().fadeOut();">&times;</span> </div></div>').insertAfter('#app');
+                    }
+                }
+            });
+        });
+    }
+};
 
 var initGetTariffShipper = function () {
     if ($('#delivery_company').length) {
@@ -376,6 +413,6 @@ $(document).ready(function(){
 
     $('ul.tabs').tabs();
     $('select').material_select();
-    initProvinceSelect();
-    initCitySelect();
+    initProvinceSelect('#receiver_province', '#receiver_city', '#receiver_district');
+    initCitySelect('#receiver_city', '#receiver_district');
 });      

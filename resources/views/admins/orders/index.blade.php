@@ -14,7 +14,9 @@
             <tr>
                 <th>Order Number</th>
                 <th>Tracking Number</th>
-                <th>Status</th>
+                <th>Verify Order</th>
+                <th>Ship Order</th>
+                <th>Latest Status</th>
                 <th>Receiver Name</th>
                 <th>Receiver Phone</th>
                 <th>Receiver Address</th>
@@ -35,6 +37,8 @@ $(function() {
         columns: [
             { data: 'order_number', name: 'order_number' },
             { data: 'tracking_number', name: 'tracking_number' },
+            { data: 'verify_order', name: 'verify_order' },
+            { data: 'ship_order', name: 'ship_order' },
             { data: 'latest_status', name: 'latest_status' },
             { data: 'receiver_name', name: 'receiver_name' },
             { data: 'receiver_phone', name: 'receiver_phone' },
@@ -45,34 +49,6 @@ $(function() {
         order: [[1, 'desc']]
     });
 });
-
-function initTNBar(el) {
-    var container = $(el).parent().parent();
-    var currentValue = container.find('.tn-container').text();
-    container.html('<input type="text" value="' + currentValue + '" onkeypress="return initChangeTN(event, this)">');
-}
-
-function initChangeTN(e, el) {
-    if (e.keyCode == 13) {
-        var trackingNumber = $(el).val();
-        var orderNumber    = $(el).parent().parent().find('td')[0].innerHTML;
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        $.ajax({
-            /* the route pointing to the post function */
-            url: '/backend/orders/tracking-number/update',
-            type: 'POST',
-            /* send the csrf-token and the input to the controller */
-            data: {_token: csrf, tracking_number: trackingNumber, order_number: orderNumber},
-            dataType: 'JSON',
-            /* remind that 'data' is the response of the AjaxController */
-            success: function success(data) {
-                var content = '<div class="tn-container">'+data.tracking_number+'</div> <b><a href="#" class="edit-tn" onclick="initTNBar(this)">[<i class="fa fa-icon fa-edit"></i> edit]</a></b>';
-                $(el).parent().html(content);
-            },
-            error: function error(data) {
-            }
-        });
-    }
-}
 </script>
+<script src="{{ asset('assets/admin/js/order.js') }}"></script>
 @endsection

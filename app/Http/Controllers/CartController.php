@@ -104,11 +104,6 @@ class CartController extends Controller
                         $cart->amount += 1;
                     }
                     $cart->save();
-                    $response = [
-                        'status'  => 'success',
-                        'type'    => 'success',
-                        'message' => 'Product has been added',
-                    ];
                 }
             } else {
                 $guestCart = [];
@@ -129,13 +124,13 @@ class CartController extends Controller
                         ];
                     }
                     session()->put('guest-cart', $guestCart);
-                    $response = [
-                        'status'  => 'success',
-                        'type'    => 'success',
-                        'message' => 'Product has been added',
-                    ];
                 }
             }
+            $response = [
+                'status'  => 'success',
+                'type'    => 'success',
+                'message' => 'Product has been added',
+            ];
             return response()->json($response); 
         } else {
             $rules = [
@@ -154,7 +149,6 @@ class CartController extends Controller
                                 'product_id'         => $product->id,
                                 'user_id'            => \Auth::user()->id,
                                 'product_variant_id' => $request->variant,
-                                'size'               => $request->size
                             ]);
                             if ($cart->id) {
                                 $cart->amount += $request->quantity;
@@ -250,13 +244,36 @@ class CartController extends Controller
                 $sicepatProvinces = Province::orderBy('name', 'ASC')->pluck('name', 'name');
                 $sicepatProvinces->prepend('-- Pilih Provinsi --', '');
             }
+            $districtCode = District::select('name', 'code')->where('name', '=', \Auth::user()->district)->first();
+            try {
+                $client   = new \GuzzleHttp\Client();
+                $response = $client->request(
+                    'GET', 
+                    $this->tariffEndpoint . '?api-key=' . $this->sicepatApikey . '&origin=TGR&destination=' .$districtCode->code . '&weight=' . $totalWeight/1000
+                );
+                $result   = json_decode($response->getBody(), true);
+                if (!empty($result['sicepat']['results'])) {
+                    $deliveryService = [];
+                    for ($i = 0; $i < count($result['sicepat']['results']); $i++) {
+                        if ($result['sicepat']['results'][$i]['service'] == 'REG' ||
+                            $result['sicepat']['results'][$i]['service'] == 'BEST') {
+                            $deliveryService[$result['sicepat']['results'][$i]['service'] . ' | Rp.' . $result['sicepat']['results'][$i]['tariff']] = $result['sicepat']['results'][$i]['service'] . ' | Rp.' . $result['sicepat']['results'][$i]['tariff'];
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                $deliveryService = ['-' => 'Tidak termuat, Tolong reload'];
+                \Log::info('not loaded');
+            }
             return view('carts.checkout', [
-                'profileNav'  => 'cart',
-                'carts'       => $carts,
-                'qty'         => $quantity,
-                'totalPrice'  => $totalPrice,
-                'totalWeight' => $totalWeight,
-                'provinces'   => $sicepatProvinces,
+                'profileNav'   => 'cart',
+                'deliveryService' => $deliveryService,
+                'userDistrict' => [$districtCode->code => $districtCode->name],
+                'carts'        => $carts,
+                'qty'          => $quantity,
+                'totalPrice'   => $totalPrice,
+                'totalWeight'  => $totalWeight,
+                'provinces'    => $sicepatProvinces,
             ]);
         } else {
             $carts               = session()->get('guest-cart-checkout');

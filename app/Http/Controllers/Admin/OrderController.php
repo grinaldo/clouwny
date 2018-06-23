@@ -51,12 +51,20 @@ class OrderController extends ResourceController
     protected $columnEdit = [
         [
             'latest_status',
-            '{!! $latest_status=="Order Shipped"?"<span class=\"label label-success\">$latest_status</span>":"<span class=\"label label-warning\">$latest_status</span>" !!}'
+            '{!! $latest_status=="Order Shipped"?"<span style=\"color:white !important\" class=\"latest-status label label-success\">$latest_status</span>":"<span style=\"color:white !important\" class=\"latest-status label label-warning\">$latest_status</span>" !!}',
         ],
         [
             'tracking_number', 
-            '<div class="tn-container">{{$tracking_number}}</div> <b><a href="#" class="edit-tn" onclick="initTNBar(this)">[<i class="fa fa-icon fa-edit"></i> edit]</a></b>'
-        ]
+            '<div class="tn-container">{{$tracking_number}}</div> <b><a href="#" class="edit-tn" onclick="initTNBar(this)">[<i class="fa fa-icon fa-edit"></i> edit]</a></b>',
+        ],
+        [
+            'verify_order',
+            '<input type="checkbox" class="verify-checkbox" data-status="verification" onchange="initUpdateOrderStatus(event,this)" {{ ($latest_status == "Order Verified" || $latest_status == "Order Shipped") ? "checked" : "" }}/>',
+        ],
+        [
+            'ship_order',
+            '<input type="checkbox" class="shipped-checkbox" data-status="ship"  onchange="initUpdateOrderStatus(event,this)" {{ ($latest_status == "Order Shipped") ? "checked" : "" }}/>',
+        ],
     ];
 
     public function __construct(Model $model)
@@ -104,74 +112,107 @@ class OrderController extends ResourceController
     
     public function updateStatus(Request $request)
     {
-        $orderStatus = new OrderStatus($request->all());
+        if ($request->ajax()) {
+            $response = [
+                'status'  => 'failed',
+                'message' => 'Invalid Request'
+            ];
+            if (!empty($request->check)) {
+                $order = Model::where('order_number', '=', $request->order_number)->first();
+                if (!empty($order)) {
+                    if ($request->status == 'verification') {
+                        \Log::info('here: ' . $request->check);
+                        $status = ($request->check == 'true') ? Model::ORDER_STATUS_VERIFIED : Model::ORDER_STATUS_AWAITING_VERIFICATION;
+                    } else {
+                        $status = ($request->check == 'true') ? Model::ORDER_STATUS_SHIPPED : Model::ORDER_STATUS_VERIFIED;
+                    }
+                    $orderStatus = OrderStatus::FirstOrNew([
+                        'order_id' => $order->id,
+                        'status' => $status,
+                    ]);
+                    $order->latest_status = $status;
+                    $orderStatus->save();
+                    $order->save();
 
-        $order = Model::find($request->order_id);
-        $order->latest_status   = $request->status;
-        $order->tracking_number = $request->tracking_number;
-
-        $shippedOrderCount = OrderStatus::where('order_id', '=', $order->id)
-            ->where('status', '=', Model::ORDER_STATUS_SHIPPED)
-            ->count();
-        /**
-         * Format for fulfillment
-         * [
-         *     'product_id' => [
-         *         'variant_id_1' => 'amount',
-         *         'variant_id_2' => 'amount'
-         *     ]
-         * ]
-         * 
-         * @var array
-         */
-        $productToDeplete = [];
-        if ($request->status == Model::ORDER_STATUS_SHIPPED &&
-            $shippedOrderCount == 0
-        ) {
-            foreach ($order->orderItems()->get() as $variant) {
-                if (!empty($productToDeplete[$variant->product_id]) && 
-                    count($productToDeplete[$variant->product_id]) 
-                ) {
-                    $productToDeplete[$variant->product_id][$variant->product_variant_id] += $variant->amount;
-                } else {
-                    $productToDeplete[$variant->product_id][$variant->product_variant_id] = $variant->amount;
+                    $response = [
+                        'status'  => 'success',
+                        'order_number' => $order->order_number,
+                        'order_status' => $order->latest_status,
+                        'message' => 'Success'
+                    ];
                 }
             }
+            return response()->json($response);
+        } else {
+            $orderStatus = new OrderStatus($request->all());
 
-            foreach ($productToDeplete as $key => $ptd) {
-                $productGet = Product::find($key);
-                foreach ($ptd as $pkey => $pv) {
-                    $variantGet = ProductVariant::find($pkey);
-                    if (!empty($variantGet)) {
-                        $variantGet->stock -= $pv;
-                        $variantGet->save();
-                        $productGet->stock -= $pv;
+            $order = Model::find($request->order_id);
+            $order->latest_status   = $request->status;
+            $order->tracking_number = $request->tracking_number;
+
+            $shippedOrderCount = OrderStatus::where('order_id', '=', $order->id)
+                ->where('status', '=', Model::ORDER_STATUS_SHIPPED)
+                ->count();
+            /**
+             * Format for fulfillment
+             * [
+             *     'product_id' => [
+             *         'variant_id_1' => 'amount',
+             *         'variant_id_2' => 'amount'
+             *     ]
+             * ]
+             * 
+             * @var array
+             */
+            $productToDeplete = [];
+            if ($request->status == Model::ORDER_STATUS_SHIPPED &&
+                $shippedOrderCount == 0
+            ) {
+                foreach ($order->orderItems()->get() as $variant) {
+                    if (!empty($productToDeplete[$variant->product_id]) && 
+                        count($productToDeplete[$variant->product_id]) 
+                    ) {
+                        $productToDeplete[$variant->product_id][$variant->product_variant_id] += $variant->amount;
+                    } else {
+                        $productToDeplete[$variant->product_id][$variant->product_variant_id] = $variant->amount;
                     }
                 }
-                $productGet->save();
+
+                foreach ($productToDeplete as $key => $ptd) {
+                    $productGet = Product::find($key);
+                    foreach ($ptd as $pkey => $pv) {
+                        $variantGet = ProductVariant::find($pkey);
+                        if (!empty($variantGet)) {
+                            $variantGet->stock -= $pv;
+                            $variantGet->save();
+                            $productGet->stock -= $pv;
+                        }
+                    }
+                    $productGet->save();
+                }
+
+                // Send Email
+                \Mail::send(
+                    'emails.ordership',
+                    [
+                        'title' => 'Order Shipped!',
+                        'order' => $order
+                    ], 
+                    function ($message) use ($order) {
+                        $message->from('ov@clouwny.com', 'Clouwny');
+                        $message->to($order->receiver_email);
+                        $message->subject("Clouwny Order Shipped");
+
+                    }
+                );
             }
 
-            // Send Email
-            \Mail::send(
-                'emails.ordership',
-                [
-                    'title' => 'Order Shipped!',
-                    'order' => $order
-                ], 
-                function ($message) use ($order) {
-                    $message->from('ov@clouwny.com', 'Clouwny');
-                    $message->to($order->receiver_email);
-                    $message->subject("Clouwny Order Shipped");
+            $order->save();
+            $orderStatus->save();
 
-                }
-            );
+            session()->flash(NOTIF_SUCCESS, 'Order status updated!');
+            return redirect()->route('backend.orders.index');
         }
-
-        $order->save();
-        $orderStatus->save();
-
-        session()->flash(NOTIF_SUCCESS, 'Order status updated!');
-        return redirect()->route('backend.orders.index');
     }
 
     public function updateTrackingNumber(Request $request)
@@ -261,13 +302,19 @@ class OrderController extends ResourceController
     {
         $ordersChunked = [];
         $orders = Model::where('latest_status', '<>', Model::ORDER_STATUS_SHIPPED)
-            ->orWhere('latest_status', '<>', Model::ORDER_STATUS_CANCELLED)
-            ->orWhere('latest_status', '<>', Model::ORDER_STATUS_REFUNDED)
-            ->orWhere('latest_status', '=', null)
+            ->Where('latest_status', '<>', Model::ORDER_STATUS_CANCELLED)
+            ->Where('latest_status', '<>', Model::ORDER_STATUS_REFUNDED)
             ->chunk(6, function ($ogs) use (&$ordersChunked) {
                 $orderTemp = [];
                 foreach ($ogs as $og) {
                     $orderTemp[] = $og;
+                    $og->latest_status = Model::ORDER_STATUS_SHIPPED;
+                    $og->save();
+
+                    $orderStatus = OrderStatus::firstOrCreate([
+                        'order_id' => $og->id,
+                        'status'   => Model::ORDER_STATUS_VERIFIED,
+                    ]);
                 }
                 $ordersChunked[] = $orderTemp;
             });

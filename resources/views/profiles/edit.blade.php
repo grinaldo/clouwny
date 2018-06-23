@@ -77,6 +77,7 @@ Clouwny | Edit Profile
                                     <label for="city" class="active">Kota</label>
                                     {!! Form::select('city', $cities) !!}
                                 </div>
+                                {{ \Auth::user()->district }}
                                 <div class="input-field col s12">
                                     <label for="district" class="active">Kecamatan</label>
                                     {!! Form::select('district', $districts) !!}

@@ -86,11 +86,11 @@ Site Name | Checkout
                                         Provinsi
                                         <span class="red-text">*</span>
                                     </label>   
-                                    {!! Form::select('receiver_province', $provinces, '', ['id' => 'receiver_province']) !!}
+                                    {!! Form::select('receiver_province', $provinces, (\Auth::check()) ? \Auth::user()->province : '', ['id' => 'receiver_province']) !!}
                                 </div>
                                 <div class="input-field col m6 s6">
                                     <label for="receiver_city" id="receiver_city_label" class="active">Kota</label>   
-                                    {!! Form::select('receiver_city', ['-', '-'], '', ['id' => 'receiver_city']) !!}
+                                    {!! Form::select('receiver_city', (\Auth::check()) ? [\Auth::user()->city => \Auth::user()->city] : ['-', '-'], '', ['id' => 'receiver_city']) !!}
                                 </div>
                             </div>
                             <div class="row">
@@ -99,11 +99,11 @@ Site Name | Checkout
                                         Kecamatan
                                         <span class="red-text">*</span>
                                     </label>   
-                                    {!! Form::select('receiver_district', ['-', '-'], '', ['id' => 'receiver_district']) !!}
+                                    {!! Form::select('receiver_district', (\Auth::check()) ? $userDistrict : ['-', '-'], '', ['id' => 'receiver_district']) !!}
                                 </div>
                                 <div class="input-field col m6 s6">
                                     <label for="shipping_fee" id="shipping_fee_label" class="active">Jenis Pengiriman</label>   
-                                    {!! Form::select('shipping_fee', ['-', '-'], '', ['id' => 'shipping_fee']) !!}
+                                    {!! Form::select('shipping_fee',  (\Auth::check()) ? $deliveryService : ['-', '-'], '', ['id' => 'shipping_fee']) !!}
                                 </div>
                             </div>
                             <div class="row">
