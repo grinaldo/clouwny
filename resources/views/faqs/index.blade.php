@@ -29,7 +29,7 @@ Clouwny | FAQ
                             </p>
                             <p>
                                 <b>Answer: </b> 
-                                <span>{!! $faq->ansewr !!}</span>
+                                <span>{!! $faq->answer !!}</span>
                             </p>
                         </div>
                     </li>
