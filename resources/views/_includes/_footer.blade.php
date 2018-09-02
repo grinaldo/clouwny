@@ -23,13 +23,13 @@
                     @if(!empty($socialMedia))
                     @foreach($socialMedia as $sm) 
                     <li><a class="white-text" href="#!">
-                            @if(strtolower($sm->name) == 'instagram')
-                            <i class="fa fa-icon fa-instagram">
+                            {{-- @if(strtolower($sm->name) == 'instagram')
+                            <i class="fa fa-icon fa-instagram"> </i>
                             @elseif(strtolower($sm->name) == 'whatsapp')
                             <i class="fa fa-icon fa-phone"> </i> 
                             @else
                             {{ ucfirst(strtolower($sm->name)) }}: 
-                            @endif
+                            @endif --}}
                             {{ $sm->url }}
                         </a>
                     </li>

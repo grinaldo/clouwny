@@ -29,7 +29,7 @@ class Controller extends BaseController
         $companyBioFooter  = \Cache::remember('company-bio-footer', $this->cacheLong, function () {
             return \App\Model\Page::where('name', '=', 'footer-static')->first();
         });
-        $socialMedia       = \Cache::remember('company-bio-footer', $this->cacheLong, function () {
+        $socialMedia       = \Cache::remember('company-social-media', $this->cacheLong, function () {
             return \App\Model\SocialMedia::all();
         });
 
