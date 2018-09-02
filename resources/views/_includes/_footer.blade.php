@@ -4,8 +4,8 @@
             <div class="col l6 s12">
                 <h5 class="white-text">Company Bio</h5>
                 <p class="white-text">
-                    @if(!empty($companyBio))
-                    {{ $companyBio }}
+                    @if(!empty($bioFooter))
+                    {!! $bioFooter !!}
                     @endif
                 </p>
             </div>

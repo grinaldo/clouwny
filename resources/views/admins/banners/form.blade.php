@@ -27,7 +27,7 @@
     {!! Form::backendNumber('order', 'Order') !!}
     {!! Form::backendFileBrowser('image', "Select Image")!!}
     {!! Form::backendText('name', 'Name') !!}
-    {!! Form::backendWysiwyg('description', 'Description') !!}
+    {!! Form::backendTextarea('description', 'Description') !!}
 
     {!! Form::backendSelect('published', 'Published', ['No', 'Yes']) !!}
     
