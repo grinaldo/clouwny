@@ -147,7 +147,7 @@ Clouwny | Home Page
                         <img src="{{ asset(!empty($product->images()->first())?$product->images()->first()->image:'images/product-2.jpg') }}" alt="">
                     </div>
                     <div class="product-card__description">
-                        <b>Product Title: </b> Rp 1.000.000
+                        <b>{{$product->name}} </b> Rp {{ number_format($product->price) }}
                     </div>
                 </a>
             </div>

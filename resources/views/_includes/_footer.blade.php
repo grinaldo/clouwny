@@ -3,7 +3,11 @@
         <div class="row">
             <div class="col l6 s12">
                 <h5 class="white-text">Company Bio</h5>
-                <p class="white-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio veritatis officia sunt sequi necessitatibus rerum voluptates debitis maiores, iusto tempora et laudantium corrupti, tempore. Incidunt aliquam doloremque maxime a libero!</p>
+                <p class="white-text">
+                    @if(!empty($companyBio))
+                    {{ $companyBio }}
+                    @endif
+                </p>
             </div>
             <div class="col l3 s12">
                 <h5 class="white-text">Sites</h5>
@@ -16,9 +20,21 @@
             <div class="col l3 s12">
                 <h5 class="white-text">Connect</h5>
                 <ul>
-                    <li><a class="white-text" href="#!"><i class="fa fa-icon fa-phone"> </i> 080989999</a></li>
-                    <li><a class="white-text" href="#!"><i class="fa fa-icon fa-instagram"> </i> @instagram_account</a></li>
-                    <li><a class="white-text" href="#!">Line: @line_account</a></li>
+                    @if(!empty($socialMedia))
+                    @foreach($socialMedia as $sm) 
+                    <li><a class="white-text" href="#!">
+                            @if(strtolower($sm->name) == 'instagram')
+                            <i class="fa fa-icon fa-instagram">
+                            @elseif(strtolower($sm->name) == 'whatsapp')
+                            <i class="fa fa-icon fa-phone"> </i> 
+                            @else
+                            {{ ucfirst(strtolower($sm->name)) }}: 
+                            @endif
+                            {{ $sm->url }}
+                        </a>
+                    </li>
+                    @endforeach
+                    @endif
                 </ul>
             </div>
         </div>
