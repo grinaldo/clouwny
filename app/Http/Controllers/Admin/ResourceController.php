@@ -172,7 +172,7 @@ abstract class ResourceController extends Controller
 
         $this->model = $this->model->newInstance();
         $this->model->fill($this->form->all());
-        if ($this->form->input('password')) {
+        if (!empty($this->form->input('password'))) {
             $this->model->password = $this->form->input('password');
         }
         $this->doSave();
@@ -220,7 +220,7 @@ abstract class ResourceController extends Controller
         $this->afterValidate();
 
         $this->model->fill($this->form->all());
-        if ($this->form->input('password')) {
+        if (!empty($this->form->input('password'))) {
             $this->model->password = $this->form->input('password');
         }
         $this->doSave();

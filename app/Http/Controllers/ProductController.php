@@ -29,7 +29,7 @@ class ProductController extends Controller
             return redirect()->route('products');
         }
         $products = \Cache::remember(
-            'products-pagination',
+            'products-pagination-'.$categoryGet->slug,
             $this->cacheShort,
             function () use ($categoryGet) {
                 return Product::where('category_id', '=', $categoryGet->id)

@@ -26,11 +26,19 @@ class Controller extends BaseController
         $webLogo           = \Cache::remember('web-logo', $this->cacheLong, function () {
             return \App\Model\Page::where('name', '=', 'logo-static')->first();
         });
+        $companyBioFooter  = \Cache::remember('company-bio-footer', $this->cacheLong, function () {
+            return \App\Model\Page::where('name', '=', 'footer-static')->first();
+        });
+        $socialMedia       = \Cache::remember('company-social-media', $this->cacheLong, function () {
+            return \App\Model\SocialMedia::all();
+        });
 
         \View::share([
             'allCategories' => $allCategories,
             'baseRoute'     => $this->getControllerName(),
-            'webLogo'       => !empty($webLogo) && !empty($webLogo->image) ? $webLogo->image : 'images/logo.png'
+            'webLogo'       => !empty($webLogo) && !empty($webLogo->image) ? $webLogo->image : 'images/logo.png',
+            'bioFooter'     => $companyBioFooter,
+            'socialMedia'   => $socialMedia,
         ]);
     }
 
