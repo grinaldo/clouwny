@@ -11280,6 +11280,15 @@ $('.hamburger').click(function () {
     $('.overlay').toggle();
 });
 
+$('.overlay').click(function () {
+    console.log('test');
+    $('.hamburger').toggleClass('open');
+    $('.side-nav').toggleClass('side-nav--open');
+    $('.brand-logo img').toggleClass('brand-logo__close');
+    $('.user-actions').toggleClass('user-actions__close');
+    $(this).toggle();
+});
+
 $('.close-dialog').click(function () {
     $($('.close-dialog').data('target')).fadeOut();
 });
