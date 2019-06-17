@@ -268,7 +268,7 @@ class CartController extends Controller
             return view('carts.checkout', [
                 'profileNav'   => 'cart',
                 'deliveryService' => $deliveryService,
-                'userDistrict' => [$districtCode->code => $districtCode->name],
+                'userDistrict' => empty($districtCode) ? [] : [$districtCode->code => $districtCode->name],
                 'carts'        => $carts,
                 'qty'          => $quantity,
                 'totalPrice'   => $totalPrice,

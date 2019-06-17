@@ -29,7 +29,7 @@ Clouwny | Home Page
                     </div> 
                     <div class="col s6 bg-pink">
                     </div>
-                    <div class="hero-relative" style="background: url({{ asset($banner->image) }}) center no-repeat; ">
+                    <div class="hero-relative" style="background: url('{{ asset($banner->image) }}') center no-repeat; ">
                         <h3 class="hero-relative__heading">{{ $banner->name }}</h3>
                         <p class="hero-relative__description">{{ $banner->description }}</p>
                     </div>
